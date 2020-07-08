@@ -1,6 +1,6 @@
 ﻿@using Microsoft.JSInterop
 
-<div @onmousemove="MovingAsync" style="cursor: move; border-bottom: 1px solid #202020;">
+<div @onmousemove="MovingAsync" @onmousedown="MouseDownAsync" style="cursor: move; border-bottom: 1px solid #202020;">
     @heading(@<text>@Element.Title</text>)
 </div>
 
@@ -49,6 +49,14 @@
             Element.Grid.MovingIndicatorOverlay.SetHeader(null);
         }
     }
+    internal async Task MouseDownAsync(MouseEventArgs e)
+    {
+        render_required = false;
+        if (e.Buttons == 1)
+        {
+            await MoveElementAsync(e);
+        }
+    }
     private (double X, double Y)? start_position;
     private double[] grid_position;
     private double[] element_position_and_dimensions;
@@ -61,6 +69,7 @@
             start_position = (X: e.ClientX, Y: e.ClientY); // setting this last assures that all other values are already set, which is important in the else branch.
             Element.Grid.MovingIndicatorOverlay.SetSize(element_position_and_dimensions[2], element_position_and_dimensions[3]);
             Element.Grid.MovingIndicatorOverlay.SetHeader(this);
+            Element.Grid.MovingIndicatorOverlay.SetPosition(element_position_and_dimensions[0], element_position_and_dimensions[1]);
         }
         else
         {
@@ -68,22 +77,22 @@
             var overlay_x = element_position_and_dimensions[0] + x - start_position.Value.X;
             var overlay_y = element_position_and_dimensions[1] + y - start_position.Value.Y;
             Element.Grid.MovingIndicatorOverlay.SetPosition(overlay_x, overlay_y);
-            if (x > 20 + grid_position[0] + element_position_and_dimensions[0] + element_position_and_dimensions[2])
+            if (overlay_x > 2 + element_position_and_dimensions[0] + element_position_and_dimensions[2] / Math.Max(1, Element.ColumnSpan))
             {
                 Element.MoveRight();
                 start_position = null;
             }
-            if (y > 20 + grid_position[1] + element_position_and_dimensions[1] + element_position_and_dimensions[3])
+            if (overlay_y > 2 + element_position_and_dimensions[1] + element_position_and_dimensions[3] / Math.Max(1, Element.RowSpan))
             {
                 Element.MoveDown();
                 start_position = null;
             }
-            if (x + element_position_and_dimensions[2] / 2 < grid_position[0] + element_position_and_dimensions[0])
+            if (overlay_x + element_position_and_dimensions[2] / 2.0 / Math.Max(1, Element.ColumnSpan) < element_position_and_dimensions[0])
             {
                 Element.MoveLeft();
                 start_position = null;
             }
-            if (y + element_position_and_dimensions[3] / 2 < grid_position[1] + element_position_and_dimensions[1])
+            if (overlay_y + element_position_and_dimensions[3] / 2.0 / Math.Max(1, Element.RowSpan) < element_position_and_dimensions[1])
             {
                 Element.MoveUp();
                 start_position = null;

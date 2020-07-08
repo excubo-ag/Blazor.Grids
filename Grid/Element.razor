@@ -3,18 +3,18 @@
 <CascadingValue Value="this" IsFixed="true">
     @if (Grid.AspectRatio == null)
     {
-        <div style="display: grid; grid-template-rows: auto 1fr; border: 1px solid black; @column @row" @ref="Area">
-            <Header />
-            <div style="height: 100%; width: 100%; grid-row: 2">
-                @ChildContent
-            </div>
+        <div style="border: 1px solid black; @column @row">
+            @ChildContent
         </div>
     }
     else
     {
-        <div style="@column @row padding-bottom: @(100.0 / Grid.AspectRatio * actual_row_span / actual_column_span)%; width: 100%; height: 100%; position: relative">
-            <div style="width: 100%; height: 100%; position: absolute">
-                @ChildContent
+        <div style="@column @row padding-bottom: @(100.0 / Grid.AspectRatio * actual_row_span / actual_column_span)%; width: 100%; height: 100%; position: relative" @ref="Area">
+            <div style="display: grid; grid-template-rows: auto 1fr; border: 1px solid black; width: 100%; height: 100%; position: absolute">
+                <Header />
+                <div style="height: 100%; width: 100%; grid-row: 2">
+                    @ChildContent
+                </div>
             </div>
         </div>
     }
