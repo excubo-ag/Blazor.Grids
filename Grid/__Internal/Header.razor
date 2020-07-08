@@ -1,0 +1,94 @@
+﻿@using Microsoft.JSInterop
+
+<div @onmousemove="MovingAsync" style="cursor: move; border-bottom: 1px solid #202020;">
+    @heading(@<text>@Element.Title</text>)
+</div>
+
+@code {
+    [CascadingParameter] public Element Element { get; set; }
+    [Parameter] public int? HeadingLevel { get; set; } = 4;
+    private RenderFragment<RenderFragment> heading
+    {
+        get
+        {
+            const string style = "width: fit-content; margin-left:auto; margin-right: auto; user-select: none;";
+            return HeadingLevel switch
+            {
+                1 => (c) => @<h1 style="@style">@c</h1>,
+                2 => (c) => @<h2 style="@style">@c</h2>,
+                3 => (c) => @<h3 style="@style">@c</h3>,
+                4 => (c) => @<h4 style="@style">@c</h4>,
+                5 => (c) => @<h5 style="@style">@c</h5>,
+                6 => (c) => @<h6 style="@style">@c</h6>,
+                _ => (c) => @<h2 style="@style">@c</h2>,
+            };
+        }
+    }
+    private bool render_required = true;
+    protected override bool ShouldRender()
+    {
+        if (!render_required)
+        {
+            render_required = true;
+            return false;
+        }
+        return base.ShouldRender();
+    }
+    internal async Task MovingAsync(MouseEventArgs e)
+    {
+        render_required = false;
+        if (e.Buttons == 1)
+        {
+            await MoveElementAsync(e);
+        }
+        else
+        {
+            start_position = null;
+            grid_position = null;
+            element_position_and_dimensions = null;
+            Element.Grid.MovingIndicatorOverlay.SetHeader(null);
+        }
+    }
+    private (double X, double Y)? start_position;
+    private double[] grid_position;
+    private double[] element_position_and_dimensions;
+    private async Task MoveElementAsync(MouseEventArgs e)
+    {
+        if (start_position == null)
+        {
+            grid_position = await js.InvokeAsync<double[]>("eval", $"let e = document.querySelector('[_bl_{Element.Grid.Area.Id}=\"\"]'); [e.offsetLeft, e.offsetTop]");
+            element_position_and_dimensions = await js.InvokeAsync<double[]>("eval", $"let e = document.querySelector('[_bl_{Element.Area.Id}=\"\"]'); [e.offsetLeft, e.offsetTop, e.clientWidth, e.clientHeight]");
+            start_position = (X: e.ClientX, Y: e.ClientY); // setting this last assures that all other values are already set, which is important in the else branch.
+            Element.Grid.MovingIndicatorOverlay.SetSize(element_position_and_dimensions[2], element_position_and_dimensions[3]);
+            Element.Grid.MovingIndicatorOverlay.SetHeader(this);
+        }
+        else
+        {
+            var (x, y) = (e.ClientX, e.ClientY);
+            var overlay_x = element_position_and_dimensions[0] + x - start_position.Value.X;
+            var overlay_y = element_position_and_dimensions[1] + y - start_position.Value.Y;
+            Element.Grid.MovingIndicatorOverlay.SetPosition(overlay_x, overlay_y);
+            if (x > 20 + grid_position[0] + element_position_and_dimensions[0] + element_position_and_dimensions[2])
+            {
+                Element.MoveRight();
+                start_position = null;
+            }
+            if (y > 20 + grid_position[1] + element_position_and_dimensions[1] + element_position_and_dimensions[3])
+            {
+                Element.MoveDown();
+                start_position = null;
+            }
+            if (x + element_position_and_dimensions[2] / 2 < grid_position[0] + element_position_and_dimensions[0])
+            {
+                Element.MoveLeft();
+                start_position = null;
+            }
+            if (y + element_position_and_dimensions[3] / 2 < grid_position[1] + element_position_and_dimensions[1])
+            {
+                Element.MoveUp();
+                start_position = null;
+            }
+        }
+    }
+    [Inject] private IJSRuntime js { get; set; }
+}

@@ -1,0 +1,35 @@
+﻿@page "/grid"
+<h3>GridDemo</h3>
+
+<Grid>
+    <RowDefinition Height="1fr" />
+    <RowDefinition Height="auto" />
+    <RowDefinition Height="auto" />
+    <RowDefinition Height="1fr" />
+    <ColumnDefinition Width="1fr" />
+    <ColumnDefinition Width="auto" />
+    <ColumnDefinition Width="auto" />
+    <ColumnDefinition Width="1fr" />
+    <Element Column="0" Row="0">
+        <div style="background-color: purple; min-width: 2em; min-height: 2em"></div>
+    </Element>
+    <Element Column="0" Row="1">
+        <div style="background-color: pink; min-width: 2em; min-height: 2em"></div>
+    </Element>
+    <Element Column="1" Row="0">
+        <div style="background-color: gray; min-width: 2em; min-height: 2em"></div>
+    </Element>
+    <Element Column="1" Row="1">
+        <div style="background-color: green; min-width: 2em; min-height: 2em"></div>
+    </Element>
+    <Element Column="1" ColumnSpan="2" Row="2">
+        <div style="background-color: cyan; min-width: 4em; min-height: 2em"></div>
+    </Element>
+    <Element Column="2" Row="2" RowSpan="2">
+        <div style="background-color: #88884488; min-width: 2em; min-height: 4em"></div>
+    </Element>
+</Grid>
+
+@code {
+
+}

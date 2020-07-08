@@ -1,0 +1,76 @@
+﻿@using Excubo.Blazor.Grids.__Internal 
+<CascadingValue Value="this" IsFixed="true">
+    <div style="display: grid;
+            grid-template-columns: @(string.Join(" ", ColumnDefinitions.Select(d => d.Width)));
+            grid-template-rows: @(string.Join(" ", RowDefinitions.Select(d => d.Height)));
+            grid-column-gap: @ColumnGap;
+            grid-row-gap: @RowGap;
+            position: relative;
+            @additional_style"
+         @attributes="@additional_attribues_without_style"
+         @ref="Area">
+        @ChildContent
+        <MovingIndicatorOverlay @ref="MovingIndicatorOverlay"/>
+    </div>
+</CascadingValue>
+
+@code {
+    internal ElementReference Area;
+    internal MovingIndicatorOverlay MovingIndicatorOverlay;
+    private object additional_style => AdditionalAttributes == null || !AdditionalAttributes.ContainsKey("style") ? null : AdditionalAttributes["style"];
+    private IEnumerable<KeyValuePair<string, object>> additional_attribues_without_style => AdditionalAttributes?.Where(kv => kv.Key != "style");
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
+    /// <summary>
+    /// Define all rows, columns and elements here:
+    /// <br/>
+    /// &lt;Grid&gt;<br/>
+    /// &lt;RowDefinition Height="auto"/&gt;<br/>
+    /// &lt;ColumnDefinition Width="1fr"/&gt;<br/>
+    /// &lt;ColumnDefinition Width="1fr"/&gt;<br/>
+    /// &lt;Element Column="1"&gt;content...&lt;/Element Column="1"&gt;<br/>
+    /// &lt;/Grid&gt;<br/>
+    /// </summary>
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    /// <summary>
+    /// Optional aspect ratio of grid tiles
+    /// <br/>
+    /// AspectRatio = Width/Height
+    /// <br/>
+    /// Examples:
+    /// An aspect ratio of 1 results in square tiles.
+    /// An aspect ratio of 2 result in tiles that are twice as wide as high.
+    /// An aspect ratio of 0.5 result in tiles that are twice as high as wide.
+    /// </summary>
+    [Parameter] public double? AspectRatio { get; set; }
+    [Parameter] public string RowGap { get; set; } = "inherit";
+    [Parameter] public string ColumnGap { get; set; } = "inherit";
+    private List<RowDefinition> RowDefinitions = new List<RowDefinition>();
+    private List<ColumnDefinition> ColumnDefinitions = new List<ColumnDefinition>();
+    private List<Element> Elements = new List<Element>();
+    internal int Add(RowDefinition row_definition)
+    {
+        var index = RowDefinitions.Count;
+        RowDefinitions.Add(row_definition);
+        ReRenderSelfButNoChild();
+        return index;
+    }
+    internal int Add(ColumnDefinition column_definition)
+    {
+        var index = ColumnDefinitions.Count;
+        ColumnDefinitions.Add(column_definition);
+        ReRenderSelfButNoChild();
+        return index;
+    }
+    internal void Add(Element element)
+    {
+        Elements.Add(element);
+    }
+    private void ReRenderSelfButNoChild()
+    {
+        foreach (var element in Elements)
+        {
+            element.render_required = false;
+        }
+        StateHasChanged();
+    }
+}

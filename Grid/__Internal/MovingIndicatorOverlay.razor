@@ -1,0 +1,41 @@
+﻿@if (Header != null)
+{
+    <div style="position: absolute; left: @(X)px; top: @(Y)px; width: @(Width)px; height: @(Height)px; background-color: #FF000088;" @onmousemove="MovingAsync" />
+}
+@code {
+    private double X { get; set; }
+    private double Y { get; set; }
+    private double Width { get; set; }
+    private double Height { get; set; }
+    internal void SetPosition(double x, double y)
+    {
+        (X, Y) = (x, y);
+        StateHasChanged();
+    }
+    private Header Header { get; set; }
+    internal void SetHeader(Header header)
+    {
+        Header = header;
+        StateHasChanged();
+    }
+    internal void SetSize(double width, double height)
+    {
+        (Width, Height) = (width, height);
+        StateHasChanged();
+    }
+    private bool render_required = true;
+    private Task MovingAsync(MouseEventArgs e)
+    {
+        render_required = false;
+        return Header?.MovingAsync(e) ?? Task.CompletedTask;
+    }
+    protected override bool ShouldRender()
+    {
+        if (!render_required)
+        {
+            render_required = true;
+            return false;
+        }
+        return base.ShouldRender();
+    }
+} 
