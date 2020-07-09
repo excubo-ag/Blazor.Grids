@@ -1,6 +1,6 @@
 ﻿@if (Header != null)
 {
-    <div style="position: absolute; left: @(X)px; top: @(Y)px; width: @(Width)px; height: @(Height)px; background-color: #FF000088;" @onmousemove="MovingAsync" />
+    <div style="position: absolute; left: @(X)px; top: @(Y)px; width: @(Width)px; height: @(Height)px; background-color: #19c5e388;" @onmousemove="MovingAsync" @onmouseup="MouseUpAsync" />
 }
 @code {
     private double X { get; set; }
@@ -28,6 +28,11 @@
     {
         render_required = false;
         return Header?.MovingAsync(e) ?? Task.CompletedTask;
+    }
+    private Task MouseUpAsync(MouseEventArgs e)
+    {
+        render_required = false;
+        return Header?.MouseUpAsync(e) ?? Task.CompletedTask;
     }
     protected override bool ShouldRender()
     {
