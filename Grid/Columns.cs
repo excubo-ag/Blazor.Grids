@@ -15,7 +15,6 @@ namespace Excubo.Blazor.Grids
                 builder.CloseComponent();
             }
         }
-        [CascadingParameter] public Grid Grid { get; set; }
         [Parameter] public string Width { get; set; } = "auto";
         [Parameter] public int Count { get; set; }
     }
