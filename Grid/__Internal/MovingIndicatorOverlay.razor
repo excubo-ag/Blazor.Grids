@@ -1,6 +1,13 @@
-﻿@if (Header != null)
+﻿@using System.Globalization
+
+@if (Header != null)
 {
-    <div style="position: absolute; left: @(X)px; top: @(Y)px; width: @(Width)px; height: @(Height)px; background-color: #19c5e388;" @onmousemove="MovingAsync" @onmouseup="MouseUpAsync" />
+    <div @onmousemove="MovingAsync" @onmouseup="MouseUpAsync"
+         style="position: absolute; background-color: #19c5e388;
+                left: @(X.ToString(CultureInfo.InvariantCulture) + "px");
+                top: @(Y.ToString(CultureInfo.InvariantCulture) + "px");
+                width: @(Width.ToString(CultureInfo.InvariantCulture) + "px");
+                height: @(Height.ToString(CultureInfo.InvariantCulture) + "px");" />
 }
 @code {
     private double X { get; set; }
