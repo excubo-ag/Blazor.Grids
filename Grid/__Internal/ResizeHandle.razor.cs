@@ -56,29 +56,33 @@ namespace Excubo.Blazor.Grids.__Internal
             }
             else
             {
-                var overlay_x = element_dimension.Width + e.ClientX - start_position.Value.X;
-                var overlay_y = element_dimension.Height + e.ClientY - start_position.Value.Y;
-                Element.Grid.MovingIndicatorOverlay.SetSize(overlay_x, overlay_y);
-                if (overlay_x > element_dimension.Width + element_dimension.Width / Math.Max(1, Element.ColumnSpan) * 7 / 8)
-                {
-                    Element.IncreaseWidth();
-                    start_position = null;
-                }
-                if (overlay_y > element_dimension.Height + element_dimension.Height / Math.Max(1, Element.RowSpan) * 7 / 8)
-                {
-                    Element.IncreaseHeight();
-                    start_position = null;
-                }
-                if (overlay_x < element_dimension.Width - element_dimension.Width / Math.Max(1, Element.ColumnSpan) * 7 / 8)
-                {
-                    Element.DecreaseWidth();
-                    start_position = null;
-                }
-                if (overlay_y < element_dimension.Height - element_dimension.Height / Math.Max(1, Element.RowSpan) * 7 / 8)
-                {
-                    Element.DecreaseHeight();
-                    start_position = null;
-                }
+                Resize(e);
+            }
+        }
+        private void Resize(MouseEventArgs e)
+        {
+            var overlay_x = element_dimension.Width + e.ClientX - start_position.Value.X;
+            var overlay_y = element_dimension.Height + e.ClientY - start_position.Value.Y;
+            Element.Grid.MovingIndicatorOverlay.SetSize(overlay_x, overlay_y);
+            if (overlay_x - element_dimension.Width > element_dimension.Width / Math.Max(1, Element.ColumnSpan) * 7 / 8)
+            {
+                Element.IncreaseWidth();
+                start_position = null;
+            }
+            if (overlay_y - element_dimension.Height > element_dimension.Height / Math.Max(1, Element.RowSpan) * 7 / 8)
+            {
+                Element.IncreaseHeight();
+                start_position = null;
+            }
+            if (overlay_x - element_dimension.Width < -element_dimension.Width / Math.Max(1, Element.ColumnSpan) * 7 / 8)
+            {
+                Element.DecreaseWidth();
+                start_position = null;
+            }
+            if (overlay_y - element_dimension.Height < -element_dimension.Height / Math.Max(1, Element.RowSpan) * 7 / 8)
+            {
+                Element.DecreaseHeight();
+                start_position = null;
             }
         }
         protected override bool ShouldRender()
