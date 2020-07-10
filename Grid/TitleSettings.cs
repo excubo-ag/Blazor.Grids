@@ -2,12 +2,6 @@
 
 namespace Excubo.Blazor.Grids
 {
-    public enum Alignment
-    {
-        Left,
-        Center,
-        Right
-    }
     public class TitleSettings : ComponentBase
     {
         [CascadingParameter] public Grid Grid { get; set; }
