@@ -42,6 +42,17 @@
     /// An aspect ratio of 0.5 result in tiles that are twice as high as wide.
     /// </summary>
     [Parameter] public double? AspectRatio { get; set; }
+    /// <summary>
+    /// Whether to allow resizing elements or not. Default is false.
+    /// Note that this feature is only supported when an AspectRatio is set, otherwise this flag has no effect.
+    /// </summary>
+    [Parameter] public bool AllowResize { get; set; }
+    /// <summary>
+    /// Whether to allow moving elements or not. Default is false.
+    /// Note that this feature is only supported when an AspectRatio is set, otherwise this flag has no effect.
+    /// Important: elements are movable by dragging the title bar. Hence, without setting a title for your element, your element won't have a title bar and you won't be able to move them.
+    /// </summary>
+    [Parameter] public bool AllowMove { get; set; }
     [Parameter] public string RowGap { get; set; } = "inherit";
     [Parameter] public string ColumnGap { get; set; } = "inherit";
     private List<RowDefinition> RowDefinitions = new List<RowDefinition>();

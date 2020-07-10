@@ -1,7 +1,20 @@
 ﻿
-<div @onmousemove="MovingAsync" @onmousedown="MouseDownAsync" @onmouseup="MouseUpAsync" style="cursor: move; border-bottom: 1px solid #202020;">
-    @heading(@<text>@Element.Title</text>)
-</div>
+@if (Element.Title == null)
+{
+    return;
+}
+@if (Element.Grid.AllowMove)
+{
+    <div @onmousemove="MovingAsync" @onmousedown="MouseDownAsync" @onmouseup="MouseUpAsync" style="cursor: move; border-bottom: 1px solid #202020;">
+        @heading(@<text>@Element.Title</text>)
+    </div>
+}
+else
+{
+    <div style="border-bottom: 1px solid #202020;">
+        @heading(@<text>@Element.Title</text>)
+    </div>
+}
 
 @code {
     private RenderFragment<RenderFragment> heading

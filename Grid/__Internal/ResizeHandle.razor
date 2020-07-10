@@ -1,6 +1,9 @@
 ﻿@using Microsoft.JSInterop
- 
-<div class="eg-rh" @onmousedown="MouseDownAsync" @onmouseup="MouseUpAsync" @onmousemove="MouseMoveAsync"></div>
+
+@if (Element.Grid.AllowResize)
+{
+    <div class="eg-rh" @onmousedown="MouseDownAsync" @onmouseup="MouseUpAsync" @onmousemove="MouseMoveAsync"></div>
+}
 
 @code {
     [CascadingParameter] public Element Element { get; set; }
