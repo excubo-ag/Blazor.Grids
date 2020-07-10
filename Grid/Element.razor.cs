@@ -90,11 +90,13 @@ namespace Excubo.Blazor.Grids
         internal void MoveUp()
         {
             Row -= 1;
+            Grid.UpdateRows();
             _ = RowChanged.InvokeAsync(Row);
         }
         internal void MoveDown()
         {
             Row += 1;
+            Grid.UpdateRows();
             _ = RowChanged.InvokeAsync(Row);
         }
         internal void IncreaseWidth()
@@ -106,6 +108,7 @@ namespace Excubo.Blazor.Grids
         {
             RowSpan = RowSpan < 2 ? 2 : RowSpan + 1;
             _ = RowSpanChanged.InvokeAsync(RowSpan);
+            Grid.UpdateRows();
         }
         internal void DecreaseWidth()
         {
@@ -116,6 +119,7 @@ namespace Excubo.Blazor.Grids
         {
             RowSpan -= 1;
             _ = RowSpanChanged.InvokeAsync(RowSpan);
+            Grid.UpdateRows();
         }
     }
 }

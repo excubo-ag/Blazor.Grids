@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -50,6 +51,10 @@ namespace Excubo.Blazor.Grids
         /// The gap between columns.
         /// </summary>
         [Parameter] public string ColumnGap { get; set; } = "inherit";
+        /// <summary>
+        /// If enabled, the Grid manages the number of rows automatically. This is useful for the dashboard scenario where elements can be moved down as much as wanted, and the Grid just adds rows.
+        /// </summary>
+        [Parameter] public bool AutoRows { get; set; }
         private readonly List<RowDefinition> row_definitions = new List<RowDefinition>();
         private readonly List<ColumnDefinition> column_definitions = new List<ColumnDefinition>();
         private readonly List<Element> elements = new List<Element>();
@@ -70,6 +75,7 @@ namespace Excubo.Blazor.Grids
         internal void Add(Element element)
         {
             elements.Add(element);
+            UpdateRows();
         }
         private void ReRenderSelfButNoChild()
         {
@@ -78,6 +84,27 @@ namespace Excubo.Blazor.Grids
                 element.render_required = false;
             }
             StateHasChanged();
+        }
+        internal void UpdateRows()
+        {
+            // if we have "auto-rows", then see whether we have the right amount of rows
+            if (AutoRows && elements.Any())
+            {
+                var max_row = elements.Max(e => e.Row + Math.Max(1, e.RowSpan) - 1);
+                var delta = max_row - row_definitions.Count;
+                if (delta > 0)
+                {
+                    row_definitions.AddRange(Enumerable.Range(0, delta).Select(_ => new RowDefinition()));
+                }
+                else if (delta < 0)
+                {
+                    row_definitions.RemoveRange(max_row, -delta);
+                }
+                if (delta != 0)
+                {
+                    ReRenderSelfButNoChild();
+                }
+            }
         }
     }
 }
