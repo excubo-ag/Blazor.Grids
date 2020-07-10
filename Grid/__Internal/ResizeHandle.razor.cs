@@ -6,39 +6,21 @@ using System.Threading.Tasks;
 
 namespace Excubo.Blazor.Grids.__Internal
 {
-    public partial class Header
+    public partial class ResizeHandle
     {
         [CascadingParameter] public Element Element { get; set; }
-        [Parameter] public int? HeadingLevel { get; set; } = 4;
         private bool render_required = true;
-        protected override bool ShouldRender()
-        {
-            if (!render_required)
-            {
-                render_required = true;
-                return false;
-            }
-            return base.ShouldRender();
-        }
-        internal async Task MovingAsync(MouseEventArgs e)
-        {
-            render_required = false;
-            if (e.Buttons == 1)
-            {
-                await MoveElementAsync(e);
-            }
-            else
-            {
-                start_position = null;
-                Element.Grid.MovingIndicatorOverlay.Release();
-            }
-        }
         private async Task MouseDownAsync(MouseEventArgs e)
         {
             render_required = false;
             if (e.Buttons == 1)
             {
-                await MoveElementAsync(e);
+                await ResizeAsync(e);
+            }
+            else
+            {
+                start_position = null;
+                Element.Grid.MovingIndicatorOverlay.Release();
             }
         }
         internal Task MouseUpAsync(MouseEventArgs e)
@@ -48,11 +30,24 @@ namespace Excubo.Blazor.Grids.__Internal
             Element.Grid.MovingIndicatorOverlay.Release();
             return Task.CompletedTask;
         }
+        internal async Task MouseMoveAsync(MouseEventArgs e)
+        {
+            render_required = false;
+            if (e.Buttons == 1)
+            {
+                await ResizeAsync(e);
+            }
+            else
+            {
+                start_position = null;
+                Element.Grid.MovingIndicatorOverlay.Release();
+            }
+        }
         private (double X, double Y)? start_position;
         private (double Left, double Top) grid_position;
         private (double Left, double Top) element_position;
         private (double Width, double Height) element_dimension;
-        private async Task MoveElementAsync(MouseEventArgs e)
+        private async Task ResizeAsync(MouseEventArgs e)
         {
             if (start_position == null)
             {
@@ -66,30 +61,39 @@ namespace Excubo.Blazor.Grids.__Internal
             }
             else
             {
-                var overlay_x = element_position.Left + e.ClientX - start_position.Value.X;
-                var overlay_y = element_position.Top + e.ClientY - start_position.Value.Y;
-                Element.Grid.MovingIndicatorOverlay.SetPosition(overlay_x, overlay_y);
-                if (overlay_x > 2 + element_position.Left + element_dimension.Width / Math.Max(1, Element.ColumnSpan))
+                var overlay_x = element_dimension.Width + e.ClientX - start_position.Value.X;
+                var overlay_y = element_dimension.Height + e.ClientY - start_position.Value.Y;
+                Element.Grid.MovingIndicatorOverlay.SetSize(overlay_x, overlay_y);
+                if (overlay_x > element_dimension.Width + element_dimension.Width / Math.Max(1, Element.ColumnSpan) * 7 / 8)
                 {
-                    Element.MoveRight();
+                    Element.IncreaseWidth();
                     start_position = null;
                 }
-                if (overlay_y > 2 + element_position.Top + element_dimension.Height / Math.Max(1, Element.RowSpan))
+                if (overlay_y > element_dimension.Height + element_dimension.Height / Math.Max(1, Element.RowSpan) * 7 / 8)
                 {
-                    Element.MoveDown();
+                    Element.IncreaseHeight();
                     start_position = null;
                 }
-                if (overlay_x + element_dimension.Width / 2.0 / Math.Max(1, Element.ColumnSpan) < element_position.Left)
+                if (overlay_x < element_dimension.Width - element_dimension.Width / Math.Max(1, Element.ColumnSpan) * 7 / 8)
                 {
-                    Element.MoveLeft();
+                    Element.DecreaseWidth();
                     start_position = null;
                 }
-                if (overlay_y + element_dimension.Height / 2.0 / Math.Max(1, Element.RowSpan) < element_position.Top)
+                if (overlay_y < element_dimension.Height - element_dimension.Height / Math.Max(1, Element.RowSpan) * 7 / 8)
                 {
-                    Element.MoveUp();
+                    Element.DecreaseHeight();
                     start_position = null;
                 }
             }
+        }
+        protected override bool ShouldRender()
+        {
+            if (!render_required)
+            {
+                render_required = true;
+                return false;
+            }
+            return base.ShouldRender();
         }
         [Inject] private IJSRuntime js { get; set; }
     }

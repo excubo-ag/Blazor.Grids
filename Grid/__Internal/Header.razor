@@ -1,37 +1,16 @@
-﻿
-@if (Element.Title == null)
+﻿@if (Element.Title == null)
 {
     return;
 }
 @if (Element.Grid.AllowMove)
 {
     <div @onmousemove="MovingAsync" @onmousedown="MouseDownAsync" @onmouseup="MouseUpAsync" style="cursor: move; border-bottom: 1px solid #202020;">
-        @heading(@<text>@Element.Title</text>)
+        <Heading Text="@Element.Title" HeadingLevel="HeadingLevel" />
     </div>
 }
 else
 {
     <div style="border-bottom: 1px solid #202020;">
-        @heading(@<text>@Element.Title</text>)
+        <Heading Text="@Element.Title" HeadingLevel="HeadingLevel" />
     </div>
-}
-
-@code {
-    private RenderFragment<RenderFragment> heading
-    {
-        get
-        {
-            const string style = "width: fit-content; margin-left:auto; margin-right: auto; user-select: none;";
-            return HeadingLevel switch
-            {
-                1 => (c) => @<h1 style="@style">@c</h1>,
-                2 => (c) => @<h2 style="@style">@c</h2>,
-                3 => (c) => @<h3 style="@style">@c</h3>,
-                4 => (c) => @<h4 style="@style">@c</h4>,
-                5 => (c) => @<h5 style="@style">@c</h5>,
-                6 => (c) => @<h6 style="@style">@c</h6>,
-                _ => (c) => @<h2 style="@style">@c</h2>,
-            };
-        }
-    }
 }
