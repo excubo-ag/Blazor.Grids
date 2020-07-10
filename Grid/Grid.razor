@@ -1,11 +1,12 @@
 ﻿@using Excubo.Blazor.Grids.__Internal 
 <CascadingValue Value="this" IsFixed="true">
-    <div style="display: grid;
-            grid-template-columns: @(string.Join(" ", ColumnDefinitions.Select(d => d.Width)));
-            grid-template-rows: @(string.Join(" ", RowDefinitions.Select(d => d.Height)));
+    <div style="
+            display: grid;
+            position: relative;
+            grid-template-columns: @(string.Join(" ", column_definitions.Select(d => d.Width)));
+            grid-template-rows: @(string.Join(" ", row_definitions.Select(d => d.Height)));
             grid-column-gap: @ColumnGap;
             grid-row-gap: @RowGap;
-            position: relative;
             @additional_style"
          @attributes="@additional_attribues_without_style"
          @ref="Area">
