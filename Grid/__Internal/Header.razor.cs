@@ -69,24 +69,29 @@ namespace Excubo.Blazor.Grids.__Internal
                 var overlay_x = element_position.Left + e.ClientX - start_position.Value.X;
                 var overlay_y = element_position.Top + e.ClientY - start_position.Value.Y;
                 Element.Grid.MovingIndicatorOverlay.SetPosition(overlay_x, overlay_y);
-                if (overlay_x > 2 + element_position.Left + element_dimension.Width / Math.Max(1, Element.ColumnSpan))
-                {
-                    Element.MoveRight();
-                    start_position = null;
-                }
-                if (overlay_y > 2 + element_position.Top + element_dimension.Height / Math.Max(1, Element.RowSpan))
+                var column_width = element_dimension.Width / Math.Max(1, Element.ColumnSpan);
+                var row_height = element_dimension.Height / Math.Max(1, Element.RowSpan);
+                var width_ratio = (e.ClientX - start_position.Value.X) / column_width;
+                var height_ratio = (e.ClientY - start_position.Value.Y) / row_height;
+                var (height_increase, height_decrease, width_increase, width_decrease) = (width_ratio, height_ratio).GetRequiredChanges(stronger_threshold: 0.9, weaker_threshold: 0.5);
+                if (height_increase)
                 {
                     Element.MoveDown();
-                    start_position = null;
                 }
-                if (overlay_x + element_dimension.Width / 2.0 / Math.Max(1, Element.ColumnSpan) < element_position.Left)
-                {
-                    Element.MoveLeft();
-                    start_position = null;
-                }
-                if (overlay_y + element_dimension.Height / 2.0 / Math.Max(1, Element.RowSpan) < element_position.Top)
+                else if (height_decrease)
                 {
                     Element.MoveUp();
+                }
+                if (width_increase)
+                {
+                    Element.MoveRight();
+                }
+                else if (width_decrease)
+                {
+                    Element.MoveLeft();
+                }
+                if (height_decrease || height_increase || width_increase || width_decrease)
+                {
                     start_position = null;
                 }
             }

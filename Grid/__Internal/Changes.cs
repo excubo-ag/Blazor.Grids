@@ -2,6 +2,19 @@
 {
     internal static class Changes
     {
+        public static (bool height_increase, bool height_decrease, bool width_increase, bool width_decrease) GetRequiredChanges(this (double width, double height) ratios, double stronger_threshold, double weaker_threshold)
+        {
+            var width_increase = ratios.width.AboveThreshold(stronger_threshold, weaker_threshold);
+            var width_decrease = ratios.width.BelowThreshold(-stronger_threshold, -weaker_threshold);
+            var height_increase = ratios.height.AboveThreshold(stronger_threshold, weaker_threshold);
+            var height_decrease = ratios.height.BelowThreshold(-stronger_threshold, -weaker_threshold);
+
+            var should_width_increase = ShouldWidthIncrease(width: (width_increase, width_decrease), height: (height_increase, height_decrease));
+            var should_width_decrease = ShouldWidthDecrease(width: (width_increase, width_decrease), height: (height_increase, height_decrease));
+            var should_height_increase = ShouldHeightIncrease(width: (width_increase, width_decrease), height: (height_increase, height_decrease));
+            var should_height_decrease = ShouldHeightDecrease(width: (width_increase, width_decrease), height: (height_increase, height_decrease));
+            return (should_height_increase, should_height_decrease, should_width_increase, should_width_decrease);
+        }
         private enum Threshold
         {
             No,
@@ -31,19 +44,6 @@
                 return Threshold.Maybe;
             }
             return Threshold.No;
-        }
-        public static (bool height_increase, bool height_decrease, bool width_increase, bool width_decrease) GetRequiredChanges(this (double width, double height) ratios)
-        {
-            var width_increase = ratios.width.AboveThreshold(0.875, 0.333);
-            var width_decrease = ratios.width.BelowThreshold(-0.875, -0.333);
-            var height_increase = ratios.height.AboveThreshold(0.875, 0.333);
-            var height_decrease = ratios.height.BelowThreshold(-0.875, -0.333);
-
-            var should_width_increase = ShouldWidthIncrease(width: (width_increase, width_decrease), height: (height_increase, height_decrease));
-            var should_width_decrease = ShouldWidthDecrease(width: (width_increase, width_decrease), height: (height_increase, height_decrease));
-            var should_height_increase = ShouldHeightIncrease(width: (width_increase, width_decrease), height: (height_increase, height_decrease));
-            var should_height_decrease = ShouldHeightDecrease(width: (width_increase, width_decrease), height: (height_increase, height_decrease));
-            return (should_height_increase, should_height_decrease, should_width_increase, should_width_decrease);
         }
         private static bool ShouldWidthIncrease((Threshold Increase, Threshold Decrease) width, (Threshold Increase, Threshold Decrease) height) => ShouldIncrease(width, height);
         private static bool ShouldWidthDecrease((Threshold Increase, Threshold Decrease) width, (Threshold Increase, Threshold Decrease) height) => ShouldDecrease(width, height);
