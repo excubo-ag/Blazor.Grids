@@ -57,6 +57,7 @@ namespace Excubo.Blazor.Grids
         #endregion
         #region internal API
         internal TitleSettings TitleSettings { get; set; } = new TitleSettings();
+        internal MoveResizeOverlaySettings MoveResizeOverlaySettings { get; set; } = new MoveResizeOverlaySettings();
         internal int Add(RowDefinition row_definition)
         {
             var index = row_definitions.Count;
