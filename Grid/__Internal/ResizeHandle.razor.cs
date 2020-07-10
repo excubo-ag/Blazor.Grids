@@ -69,7 +69,7 @@ namespace Excubo.Blazor.Grids.__Internal
             var width_ratio = (overlay_x - element_dimension.Width) / column_width;
             var height_ratio = (overlay_y - element_dimension.Height) / row_height;
             var (height_increase, height_decrease, width_increase, width_decrease) = (width_ratio, height_ratio).GetRequiredChanges(stronger_threshold: 0.875, weaker_threshold: 0.333);
-            Action Perform(Action action) => action;
+            static Action Perform(Action action) => action;
             Perform(Element.IncreaseHeight).If(height_increase);
             Perform(Element.DecreaseHeight).If(height_decrease);
             Perform(Element.IncreaseWidth).If(width_increase);
