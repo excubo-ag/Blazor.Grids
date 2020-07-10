@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Excubo.Blazor.Grids
 {
@@ -111,6 +113,18 @@ namespace Excubo.Blazor.Grids
                 element.render_required = false;
             }
             StateHasChanged();
+        }
+        [Inject] private IJSRuntime js { get; set; }
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                const string src = "_content/Excubo.Blazor.Grids/style.css";
+                var condition = $"document.head.querySelector(`[src='{src}']`) == null";
+                var action = $"let s = document.createElement('link'); s.setAttribute('rel', 'stylesheet'); s.setAttribute('href', '{src}'); document.head.appendChild(s);";
+                await js.InvokeVoidAsync("eval", $"if ({condition}) {{ {action} }}");
+            }
+            await base.OnAfterRenderAsync(firstRender);
         }
     }
 }
