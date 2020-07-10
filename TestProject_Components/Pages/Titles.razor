@@ -1,0 +1,21 @@
+﻿@page "/titles"
+
+In this demo, the titles of elements are styled using the TitleSettings.
+
+<Grid RowGap="1em" ColumnGap="1em">
+    <TitleSettings HeadingLevel="4" Alignment="Alignment.Left" />
+    <Rows Count="4" />
+    <Columns Count="4" />
+    <Element Column="0" Row="0" Title="Hello">
+        <div style="background-color: purple; min-width: 2em; min-height: 2em"></div>
+    </Element>
+    <Element Column="0" Row="1" Title="World">
+        <div style="background-color: pink; min-width: 2em; min-height: 2em"></div>
+    </Element>
+    <Element Column="0" Row="2" Title="We would like to thank everyone for being here, and congratulate them for sticking around for a long title">
+        <div style="background-color: pink; min-width: 2em; min-height: 2em"></div>
+    </Element>
+    <Element Column="1" Row="0" Title="A long long time ago, a title well remembered, ...">
+        <div style="background-color: gray; min-width: 2em; min-height: 2em"></div>
+    </Element>
+</Grid>

@@ -1,15 +1,18 @@
 ﻿@page "/resizable_elements"
 
-    <Grid AspectRatio="1.5" AllowResize="true" style="height: 100%">
-        <Rows Count="10" Height="1fr"/>
-        <Columns Count="4" Width="1fr"/>
-        @foreach (var element in elements)
-        {
-            <Element @bind-Row="element.Row" @bind-Column="element.Column" @bind-RowSpan="element.RowSpan" @bind-ColumnSpan="element.ColumnSpan" Title="@element.Color">
-                <div style="height: 100%; width: 100%; background-color: @(element.Color)"></div>
-            </Element>
-        }
-    </Grid>
+In this demo, all elements are <a href="resizable_elements">resizable</a>. This is helpful to design <a href="dashboard">dashboard-like layouts</a>.
+Important: This feature only works if an <a href="aspect_ratio">AspectRatio</a> is set.
+
+<Grid AspectRatio="1.5" AllowResize="true" style="height: 100%">
+    <Rows Count="10" Height="1fr"/>
+    <Columns Count="4" Width="1fr"/>
+    @foreach (var element in elements)
+    {
+        <Element @bind-Row="element.Row" @bind-Column="element.Column" @bind-RowSpan="element.RowSpan" @bind-ColumnSpan="element.ColumnSpan" Title="@element.Color">
+            <div style="height: 100%; width: 100%; background-color: @(element.Color)"></div>
+        </Element>
+    }
+</Grid>
 
 @code {
     public class ElementDefinition
