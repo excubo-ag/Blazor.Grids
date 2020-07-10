@@ -1,13 +1,13 @@
 ﻿@using System.Globalization
 
-@if (Header != null)
+@if (Header != null || ResizeHandle != null)
 {
-    <div @onmousemove="MovingAsync" @onmouseup="MouseUpAsync"
-         style="position: absolute; background-color: #19c5e388;
+    <div style="position: absolute; background-color: #19c5e388;
                 left: @(X.ToString(CultureInfo.InvariantCulture) + "px");
                 top: @(Y.ToString(CultureInfo.InvariantCulture) + "px");
                 width: @(Width.ToString(CultureInfo.InvariantCulture) + "px");
                 height: @(Height.ToString(CultureInfo.InvariantCulture) + "px");" />
+    <div @onmousemove="MovingAsync" @onmouseup="MouseUpAsync" style="position: absolute; background-color: transparent; left: 0; top: 0; width: 100%; height: 100%;"/>
 }
 @code {
     private double X { get; set; }
@@ -20,9 +20,23 @@
         StateHasChanged();
     }
     private Header Header { get; set; }
-    internal void SetHeader(Header header)
+    private ResizeHandle ResizeHandle { get; set; }
+    internal void Release()
+    {
+        Header = null;
+        ResizeHandle = null;
+        StateHasChanged();
+    }
+    internal void Set(Header header)
     {
         Header = header;
+        ResizeHandle = null;
+        StateHasChanged();
+    }
+    internal void Set(ResizeHandle resize_handle)
+    {
+        Header = null;
+        ResizeHandle = resize_handle;
         StateHasChanged();
     }
     internal void SetSize(double width, double height)
@@ -34,12 +48,28 @@
     private Task MovingAsync(MouseEventArgs e)
     {
         render_required = false;
-        return Header?.MovingAsync(e) ?? Task.CompletedTask;
+        if (Header != null)
+        {
+            return Header.MovingAsync(e);
+        }
+        else if (ResizeHandle != null)
+        {
+            return ResizeHandle.MouseMoveAsync(e);
+        }
+        return Task.CompletedTask;
     }
     private Task MouseUpAsync(MouseEventArgs e)
     {
         render_required = false;
-        return Header?.MouseUpAsync(e) ?? Task.CompletedTask;
+        if (Header != null)
+        {
+            return Header.MouseUpAsync(e);
+        }
+        else if (ResizeHandle != null)
+        {
+            return ResizeHandle.MouseUpAsync(e);
+        }
+        return Task.CompletedTask;
     }
     protected override bool ShouldRender()
     {

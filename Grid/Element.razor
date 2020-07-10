@@ -1,27 +1,68 @@
 ﻿@using Excubo.Blazor.Grids.__Internal
 @using System.Globalization
 
-<CascadingValue Value="this" IsFixed="true">
-    @if (Grid.AspectRatio == null)
-    {
-        <div style="border: 1px solid black; @column @row">
-            @ChildContent
-        </div>
-    }
-    else
-    {
-        var padding_bottom = 100.0 / Grid.AspectRatio.Value * actual_row_span / actual_column_span;
-        var padding_bottom_s = padding_bottom.ToString(CultureInfo.InvariantCulture) + "%";
-        <div style="@column @row padding-bottom: @padding_bottom_s; width: 100%; height: 100%; position: relative" @ref="Area">
-            <div style="display: grid; grid-template-rows: auto 1fr; border: 1px solid black; width: 100%; height: 100%; position: absolute">
-                <Header />
-                <div style="height: 100%; width: 100%; grid-row: 2">
-                    @ChildContent
-                </div>
+    <CascadingValue Value="this" IsFixed="true">
+        @if (Grid.AspectRatio == null)
+        {
+            <div style="border: 1px solid black; @column @row">
+                @ChildContent
             </div>
-        </div>
-    }
-</CascadingValue>
+        }
+        else
+        {
+            <style>
+                /*Element container*/
+                .eg-elc {
+                    width: 100%;
+                    height: 100%;
+                    position: relative;
+                }
+                /*Element*/
+                .eg-el {
+                    display: grid;
+                    grid-template-rows: auto 1fr;
+                    border: 1px solid black;
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                }
+                /*Element body*/
+                .eg-elbd {
+                    height: 100%;
+                    width: 100%;
+                    grid-row: 2;
+                }
+                /*Resize handle*/
+                .eg-rh {
+                    display: none;
+                    position: absolute;
+                    bottom: .3em;
+                    right: .3em;
+                    border-bottom: 1.2em solid black;
+                    border-left: 1.2em solid transparent;
+                    cursor: nwse-resize;
+                }
+                .eg-rh:hover {
+                    display: block;
+                }
+                /*Show resize handle on element hover*/
+                .eg-el:hover + .eg-rh {
+                    display: block;
+                }
+            </style>
+            var padding_bottom = 100.0 / Grid.AspectRatio.Value * actual_row_span / actual_column_span;
+            var padding_bottom_s = padding_bottom.ToString(CultureInfo.InvariantCulture) + "%";
+            <div class="eg-elc" style="@column @row padding-bottom: @padding_bottom_s;" @ref="Area">
+                <div class="eg-el">
+                    <Header />
+                    <div class="eg-elbd">
+                        @ChildContent
+                    </div>
+                </div>
+                <ResizeHandle />
+            </div>
+        }
+    </CascadingValue>
 
 @code {
     internal ElementReference Area;

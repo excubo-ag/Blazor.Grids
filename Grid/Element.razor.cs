@@ -97,5 +97,25 @@ namespace Excubo.Blazor.Grids
             Row += 1;
             _ = RowChanged.InvokeAsync(Row);
         }
+        internal void IncreaseWidth()
+        {
+            ColumnSpan = ColumnSpan < 2 ? 2 : ColumnSpan + 1;
+            _ = ColumnSpanChanged.InvokeAsync(ColumnSpan);
+        }
+        internal void IncreaseHeight()
+        {
+            RowSpan = RowSpan < 2 ? 2 : RowSpan + 1;
+            _ = RowSpanChanged.InvokeAsync(RowSpan);
+        }
+        internal void DecreaseWidth()
+        {
+            ColumnSpan -= 1;
+            _ = ColumnSpanChanged.InvokeAsync(ColumnSpan);
+        }
+        internal void DecreaseHeight()
+        {
+            RowSpan -= 1;
+            _ = RowSpanChanged.InvokeAsync(RowSpan);
+        }
     }
 }

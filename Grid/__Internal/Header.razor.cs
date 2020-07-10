@@ -30,10 +30,10 @@ namespace Excubo.Blazor.Grids.__Internal
             else
             {
                 start_position = null;
-                Element.Grid.MovingIndicatorOverlay.SetHeader(null);
+                Element.Grid.MovingIndicatorOverlay.Release();
             }
         }
-        internal async Task MouseDownAsync(MouseEventArgs e)
+        private async Task MouseDownAsync(MouseEventArgs e)
         {
             render_required = false;
             if (e.Buttons == 1)
@@ -45,7 +45,7 @@ namespace Excubo.Blazor.Grids.__Internal
         {
             render_required = false;
             start_position = null;
-            Element.Grid.MovingIndicatorOverlay.SetHeader(null);
+            Element.Grid.MovingIndicatorOverlay.Release();
             return Task.CompletedTask;
         }
         private (double X, double Y)? start_position;
@@ -73,7 +73,7 @@ namespace Excubo.Blazor.Grids.__Internal
                 (element_dimension.Width, element_dimension.Height) = await js.InvokeAsync<Dimension>("eval", $"let e = document.querySelector('[_bl_{Element.Area.Id}=\"\"]'); let r = {{ 'Width': e.clientWidth, 'Height': e.clientHeight }}; r");
                 start_position = (X: e.ClientX, Y: e.ClientY); // setting this last assures that all other values are already set, which is important in the else branch.
                 Element.Grid.MovingIndicatorOverlay.SetSize(element_dimension.Width, element_dimension.Height);
-                Element.Grid.MovingIndicatorOverlay.SetHeader(this);
+                Element.Grid.MovingIndicatorOverlay.Set(this);
                 Element.Grid.MovingIndicatorOverlay.SetPosition(element_position.Left, element_position.Top);
             }
             else
