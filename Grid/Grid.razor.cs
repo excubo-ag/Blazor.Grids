@@ -119,7 +119,11 @@ namespace Excubo.Blazor.Grids
         {
             if (firstRender)
             {
+#if DEBUG
                 const string src = "_content/Excubo.Blazor.Grids/style.css";
+#else
+                const string src = "_content/Excubo.Blazor.Grids/style.min.css";
+#endif
                 var condition = $"document.head.querySelector(`[src='{src}']`) == null";
                 var action = $"let s = document.createElement('link'); s.setAttribute('rel', 'stylesheet'); s.setAttribute('href', '{src}'); document.head.appendChild(s);";
                 await js.InvokeVoidAsync("eval", $"if ({condition}) {{ {action} }}");
