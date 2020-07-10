@@ -64,22 +64,26 @@ namespace Excubo.Blazor.Grids.__Internal
             var overlay_x = element_dimension.Width + e.ClientX - start_position.Value.X;
             var overlay_y = element_dimension.Height + e.ClientY - start_position.Value.Y;
             Element.Grid.MovingIndicatorOverlay.SetSize(overlay_x, overlay_y);
-            if (overlay_x - element_dimension.Width > element_dimension.Width / Math.Max(1, Element.ColumnSpan) * 7 / 8)
+            var column_width = element_dimension.Width / Math.Max(1, Element.ColumnSpan);
+            var row_height = element_dimension.Height / Math.Max(1, Element.RowSpan);
+            var h_ratio = (overlay_x - element_dimension.Width) / column_width;
+            var v_ratio = (overlay_y - element_dimension.Height) / row_height;
+            if (h_ratio > 7.0 / 8)
             {
                 Element.IncreaseWidth();
                 start_position = null;
             }
-            if (overlay_y - element_dimension.Height > element_dimension.Height / Math.Max(1, Element.RowSpan) * 7 / 8)
+            if (v_ratio > 7.0 / 8)
             {
                 Element.IncreaseHeight();
                 start_position = null;
             }
-            if (overlay_x - element_dimension.Width < -element_dimension.Width / Math.Max(1, Element.ColumnSpan) * 7 / 8)
+            if (h_ratio < -7.0 / 8)
             {
                 Element.DecreaseWidth();
                 start_position = null;
             }
-            if (overlay_y - element_dimension.Height < -element_dimension.Height / Math.Max(1, Element.RowSpan) * 7 / 8)
+            if (v_ratio < -7.0 / 8)
             {
                 Element.DecreaseHeight();
                 start_position = null;
