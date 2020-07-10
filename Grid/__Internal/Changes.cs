@@ -2,7 +2,7 @@
 {
     internal static class Changes
     {
-        public static (bool height_increase, bool height_decrease, bool width_increase, bool width_decrease) GetRequiredChanges(this (double width, double height) ratios, double stronger_threshold, double weaker_threshold)
+        public static (bool v_increase, bool v_decrease, bool h_increase, bool h_decrease) GetRequiredChanges(this (double width, double height) ratios, double stronger_threshold, double weaker_threshold)
         {
             var width_increase = ratios.width.AboveThreshold(stronger_threshold, weaker_threshold);
             var width_decrease = ratios.width.BelowThreshold(-stronger_threshold, -weaker_threshold);
