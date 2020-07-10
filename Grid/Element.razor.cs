@@ -14,7 +14,7 @@ namespace Excubo.Blazor.Grids
                 {
                     if (ColumnSpan < 2)
                     {
-                        return null;
+                        return "grid-column: 1;";
                     }
                     return $"grid-column: 1 / span {ColumnSpan};";
                 }
@@ -36,7 +36,7 @@ namespace Excubo.Blazor.Grids
                 {
                     if (RowSpan < 2)
                     {
-                        return null;
+                        return "grid-row: 1;";
                     }
                     return $"grid-row: 1 / span {RowSpan};";
                 }
