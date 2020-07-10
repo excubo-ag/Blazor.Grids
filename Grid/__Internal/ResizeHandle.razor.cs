@@ -70,21 +70,61 @@ namespace Excubo.Blazor.Grids.__Internal
             var v_ratio = (overlay_y - element_dimension.Height) / row_height;
             if (h_ratio > 7.0 / 8)
             {
+                if (v_ratio > .33)
+                {
+                    // the user probably wants to increase the RowSpan at the same time
+                    Element.IncreaseHeight();
+                }
+                else if (v_ratio < .66)
+                {
+                    // the user probably wants to decrease the RowSpan at the same time
+                    Element.DecreaseHeight();
+                }
                 Element.IncreaseWidth();
                 start_position = null;
             }
             if (v_ratio > 7.0 / 8)
             {
+                if (h_ratio > .33)
+                {
+                    // the user probably wants to increase the ColumnSpan at the same time
+                    Element.IncreaseWidth();
+                }
+                else if (h_ratio < .66)
+                {
+                    // the user probably wants to decrease the ColumnSpan at the same time
+                    Element.DecreaseWidth();
+                }
                 Element.IncreaseHeight();
                 start_position = null;
             }
             if (h_ratio < -7.0 / 8)
             {
+                if (v_ratio > .33)
+                {
+                    // the user probably wants to increase the RowSpan at the same time
+                    Element.IncreaseHeight();
+                }
+                else if (v_ratio < .66)
+                {
+                    // the user probably wants to decrease the RowSpan at the same time
+                    Element.DecreaseHeight();
+                }
                 Element.DecreaseWidth();
                 start_position = null;
             }
             if (v_ratio < -7.0 / 8)
             {
+                if (h_ratio > .33)
+                {
+                    // the user probably wants to increase the ColumnSpan at the same time
+                    Element.IncreaseWidth();
+                }
+                else if (h_ratio < .66)
+                {
+                    // the user probably wants to decrease the ColumnSpan at the same time
+                    Element.DecreaseWidth();
+                }
                 Element.DecreaseHeight();
                 start_position = null;
             }
