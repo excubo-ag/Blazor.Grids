@@ -1,14 +1,17 @@
 ﻿@page "/dashboard"
 
-    <Grid AspectRatio="1.5" AllowMove="true" AllowResize="true" AutoRows="true" style="height: 100%">
-        <Columns Count="4" Width="1fr"/>
-        @foreach (var element in elements)
-        {
-            <Element @bind-Row="element.Row" @bind-Column="element.Column" @bind-RowSpan="element.RowSpan" @bind-ColumnSpan="element.ColumnSpan" Title="@element.Color">
-                <div style="height: 100%; width: 100%; background-color: @(element.Color)"></div>
-            </Element>
-        }
-    </Grid>
+A dashboard is a grid that sets an <a href="aspect_ratio">AspectRatio</a>, <a href="movable_elements">AllowMove</a>, <a href="resizable_elements">AllowResize</a>, and AutoRows.
+This dashboard has four columns.
+
+<Dashboard style="height: 100%">
+    <Columns Count="4" Width="1fr"/>
+    @foreach (var element in elements)
+    {
+        <Element @bind-Row="element.Row" @bind-Column="element.Column" @bind-RowSpan="element.RowSpan" @bind-ColumnSpan="element.ColumnSpan" Title="@element.Color">
+            <div style="height: 100%; width: 100%; background-color: @(element.Color)"></div>
+        </Element>
+    }
+</Dashboard>
 
 @code {
     public class ElementDefinition
