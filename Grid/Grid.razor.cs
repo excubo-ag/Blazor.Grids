@@ -7,8 +7,7 @@ namespace Excubo.Blazor.Grids
 {
     public partial class Grid
     {
-        private object additional_style => AdditionalAttributes == null || !AdditionalAttributes.ContainsKey("style") ? null : AdditionalAttributes["style"];
-        private IEnumerable<KeyValuePair<string, object>> additional_attribues_without_style => AdditionalAttributes?.Where(kv => kv.Key != "style");
+        #region API
         [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
         /// <summary>
         /// Define all rows, columns and elements here:
@@ -55,9 +54,9 @@ namespace Excubo.Blazor.Grids
         /// If enabled, the Grid manages the number of rows automatically. This is useful for the dashboard scenario where elements can be moved down as much as wanted, and the Grid just adds rows.
         /// </summary>
         [Parameter] public bool AutoRows { get; set; }
-        private readonly List<RowDefinition> row_definitions = new List<RowDefinition>();
-        private readonly List<ColumnDefinition> column_definitions = new List<ColumnDefinition>();
-        private readonly List<Element> elements = new List<Element>();
+        #endregion
+        #region internal API
+        internal TitleSettings TitleSettings { get; set; } = new TitleSettings();
         internal int Add(RowDefinition row_definition)
         {
             var index = row_definitions.Count;
@@ -76,14 +75,6 @@ namespace Excubo.Blazor.Grids
         {
             elements.Add(element);
             UpdateRows();
-        }
-        private void ReRenderSelfButNoChild()
-        {
-            foreach (var element in elements)
-            {
-                element.render_required = false;
-            }
-            StateHasChanged();
         }
         internal void UpdateRows()
         {
@@ -105,6 +96,20 @@ namespace Excubo.Blazor.Grids
                     ReRenderSelfButNoChild();
                 }
             }
+        }
+        #endregion
+        private object additional_style => AdditionalAttributes == null || !AdditionalAttributes.ContainsKey("style") ? null : AdditionalAttributes["style"];
+        private IEnumerable<KeyValuePair<string, object>> additional_attribues_without_style => AdditionalAttributes?.Where(kv => kv.Key != "style");
+        private readonly List<RowDefinition> row_definitions = new List<RowDefinition>();
+        private readonly List<ColumnDefinition> column_definitions = new List<ColumnDefinition>();
+        private readonly List<Element> elements = new List<Element>();
+        private void ReRenderSelfButNoChild()
+        {
+            foreach (var element in elements)
+            {
+                element.render_required = false;
+            }
+            StateHasChanged();
         }
     }
 }

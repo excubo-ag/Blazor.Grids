@@ -9,7 +9,6 @@ namespace Excubo.Blazor.Grids.__Internal
     public partial class Header
     {
         [CascadingParameter] public Element Element { get; set; }
-        [Parameter] public int? HeadingLevel { get; set; } = 4;
         private bool render_required = true;
         protected override bool ShouldRender()
         {
