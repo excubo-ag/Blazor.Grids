@@ -17,11 +17,6 @@ namespace Excubo.Blazor.Grids.__Internal
             {
                 await ResizeAsync(e);
             }
-            else
-            {
-                start_position = null;
-                Element.Grid.MovingIndicatorOverlay.Release();
-            }
         }
         internal Task MouseUpAsync(MouseEventArgs e)
         {

@@ -50,9 +50,9 @@ namespace Excubo.Blazor.Grids
         /// The gap between columns.
         /// </summary>
         [Parameter] public string ColumnGap { get; set; } = "inherit";
-        private List<RowDefinition> row_definitions = new List<RowDefinition>();
-        private List<ColumnDefinition> column_definitions = new List<ColumnDefinition>();
-        private List<Element> elements = new List<Element>();
+        private readonly List<RowDefinition> row_definitions = new List<RowDefinition>();
+        private readonly List<ColumnDefinition> column_definitions = new List<ColumnDefinition>();
+        private readonly List<Element> elements = new List<Element>();
         internal int Add(RowDefinition row_definition)
         {
             var index = row_definitions.Count;
