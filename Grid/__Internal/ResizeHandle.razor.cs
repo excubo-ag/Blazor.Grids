@@ -66,66 +66,27 @@ namespace Excubo.Blazor.Grids.__Internal
             Element.Grid.MovingIndicatorOverlay.SetSize(overlay_x, overlay_y);
             var column_width = element_dimension.Width / Math.Max(1, Element.ColumnSpan);
             var row_height = element_dimension.Height / Math.Max(1, Element.RowSpan);
-            var h_ratio = (overlay_x - element_dimension.Width) / column_width;
-            var v_ratio = (overlay_y - element_dimension.Height) / row_height;
-            if (h_ratio > 7.0 / 8)
+            var width_ratio = (overlay_x - element_dimension.Width) / column_width;
+            var height_ratio = (overlay_y - element_dimension.Height) / row_height;
+            var (height_increase, height_decrease, width_increase, width_decrease) = (width_ratio, height_ratio).GetRequiredChanges();
+            if (height_increase)
             {
-                if (v_ratio > .33)
-                {
-                    // the user probably wants to increase the RowSpan at the same time
-                    Element.IncreaseHeight();
-                }
-                else if (v_ratio < .66)
-                {
-                    // the user probably wants to decrease the RowSpan at the same time
-                    Element.DecreaseHeight();
-                }
-                Element.IncreaseWidth();
-                start_position = null;
-            }
-            if (v_ratio > 7.0 / 8)
-            {
-                if (h_ratio > .33)
-                {
-                    // the user probably wants to increase the ColumnSpan at the same time
-                    Element.IncreaseWidth();
-                }
-                else if (h_ratio < .66)
-                {
-                    // the user probably wants to decrease the ColumnSpan at the same time
-                    Element.DecreaseWidth();
-                }
                 Element.IncreaseHeight();
-                start_position = null;
             }
-            if (h_ratio < -7.0 / 8)
+            else if (height_decrease)
             {
-                if (v_ratio > .33)
-                {
-                    // the user probably wants to increase the RowSpan at the same time
-                    Element.IncreaseHeight();
-                }
-                else if (v_ratio < .66)
-                {
-                    // the user probably wants to decrease the RowSpan at the same time
-                    Element.DecreaseHeight();
-                }
-                Element.DecreaseWidth();
-                start_position = null;
-            }
-            if (v_ratio < -7.0 / 8)
-            {
-                if (h_ratio > .33)
-                {
-                    // the user probably wants to increase the ColumnSpan at the same time
-                    Element.IncreaseWidth();
-                }
-                else if (h_ratio < .66)
-                {
-                    // the user probably wants to decrease the ColumnSpan at the same time
-                    Element.DecreaseWidth();
-                }
                 Element.DecreaseHeight();
+            }
+            if (width_increase)
+            {
+                Element.IncreaseWidth();
+            }
+            else if (width_decrease)
+            {
+                Element.DecreaseWidth();
+            }
+            if (width_decrease || width_increase || height_increase || height_decrease)
+            {
                 start_position = null;
             }
         }
