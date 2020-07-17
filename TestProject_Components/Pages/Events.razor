@@ -1,0 +1,74 @@
+﻿@page "/events"
+In this demo, events are recorded on move and resize of elements.
+
+<Grid>
+    <Columns Count="2" />
+    <Element>
+        <Dashboard RowGap="1em" ColumnGap="1em" OnMove="Moved" OnResize="Resized">
+            <TitleSettings HeadingLevel="4" Alignment="Alignment.Left" />
+            <Rows Count="4" />
+            <Columns Count="4" />
+            <Element @bind-Column="@hello_element_def.Column" @bind-Row="@hello_element_def.Row" @bind-ColumnSpan="@hello_element_def.ColumnSpan" @bind-RowSpan="@hello_element_def.RowSpan" Title="@hello_element_def.Title" OnMove="HelloMoved" OnResize="HelloResized" @ref="hello_element">
+                <div>
+                    <ul>
+                        @foreach (var e in HelloEvents)
+                        {
+                            <li>@e.Action this element to @e.a, @e.b</li>
+                        }
+                    </ul>
+                </div>
+            </Element>
+            @foreach (var el in elements)
+            {
+                <Element @bind-Column="@el.Column" @bind-Row="@el.Row" @bind-ColumnSpan="@el.ColumnSpan" @bind-RowSpan="@el.RowSpan" Title="@el.Title"></Element>
+            }
+        </Dashboard>
+    </Element>
+    <Element Column="1" style="border: none">
+        <ul>
+            @foreach (var e in GridEvents)
+            {
+                <li>@e.Action @e.ElementTitle to @e.a, @e.b</li>
+            }
+        </ul>
+    </Element>
+</Grid>
+
+@code {
+    private class ElementDefinition
+    {
+        public string Title { get; set; }
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public int RowSpan { get; set; } = 1;
+        public int ColumnSpan { get; set; } = 1;
+    }
+    private ElementDefinition hello_element_def = new ElementDefinition
+    {
+        Title = "Hello"
+    };
+    private List<ElementDefinition> elements = new List<ElementDefinition>
+{
+        new ElementDefinition { Title = "Other", Row = 1, ColumnSpan = 2 },
+        new ElementDefinition { Title = "world", Column = 1 }
+    };
+    private List<(string Action, int a, int b)> HelloEvents = new List<(string Action, int a, int b)>();
+    private List<(string Action, string ElementTitle, int a, int b)> GridEvents = new List<(string Action, string ElementTitle, int a, int b)>();
+    private Element hello_element;
+    private void Moved(Element element)
+    {
+        GridEvents.Add(("moved", element.Title, element.Row, element.Column));
+    }
+    private void Resized(Element element)
+    {
+        GridEvents.Add(("resized", element.Title, element.RowSpan, element.ColumnSpan));
+    }
+    private void HelloMoved()
+    {
+        HelloEvents.Add(("moved", hello_element.Row, hello_element.Column));
+    }
+    private void HelloResized()
+    {
+        HelloEvents.Add(("resized", hello_element.RowSpan, hello_element.ColumnSpan));
+    }
+}

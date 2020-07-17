@@ -38,6 +38,14 @@ namespace Excubo.Blazor.Grids
         /// The title that should appear at the top of the element
         /// </summary>
         [Parameter] public string Title { get; set; }
+        /// <summary>
+        /// Callback for when the element was moved.
+        /// </summary>
+        [Parameter] public Action OnMove { get; set; }
+        /// <summary>
+        /// Callback for when the element was resized.
+        /// </summary>
+        [Parameter] public Action OnResize { get; set; }
         [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
         private object additional_style => AdditionalAttributes != null && AdditionalAttributes.ContainsKey("style") ? AdditionalAttributes["style"] : null;
         private object additional_class => AdditionalAttributes != null && AdditionalAttributes.ContainsKey("class") ? AdditionalAttributes["class"] : null;
@@ -61,6 +69,7 @@ namespace Excubo.Blazor.Grids
             ColumnSpan = width;
             _ = ColumnSpanChanged.InvokeAsync(ColumnSpan);
             Grid.UpdateRows();
+            InvokeResizeEvents();
         }
         /// <summary>
         /// Moves the element to the specified position
@@ -82,6 +91,7 @@ namespace Excubo.Blazor.Grids
             Column = column;
             _ = ColumnChanged.InvokeAsync(Column);
             Grid.UpdateRows();
+            InvokeMoveEvents();
         }
         #endregion
         private int actual_column_span => ColumnSpan < 2 ? 1 : ColumnSpan;
@@ -146,22 +156,35 @@ namespace Excubo.Blazor.Grids
             }
             return base.ShouldRender();
         }
+        private void InvokeMoveEvents()
+        {
+            OnMove?.Invoke();
+            Grid.OnMove?.Invoke(this);
+        }
+        private void InvokeResizeEvents()
+        {
+            OnResize?.Invoke();
+            Grid.OnResize?.Invoke(this);
+        }
         internal void MoveRight()
         {
             Grid.RenderNothingBut(this);
             Column += 1;
+            InvokeMoveEvents();
             _ = ColumnChanged.InvokeAsync(Column);
         }
         internal void MoveLeft()
         {
             Grid.RenderNothingBut(this);
             Column -= 1;
+            InvokeMoveEvents();
             _ = ColumnChanged.InvokeAsync(Column);
         }
         internal void MoveUp()
         {
             Grid.RenderNothingBut(this);
             Row -= 1;
+            InvokeMoveEvents();
             Grid.UpdateRows();
             _ = RowChanged.InvokeAsync(Row);
         }
@@ -169,6 +192,7 @@ namespace Excubo.Blazor.Grids
         {
             Grid.RenderNothingBut(this);
             Row += 1;
+            InvokeMoveEvents();
             Grid.UpdateRows();
             _ = RowChanged.InvokeAsync(Row);
         }
@@ -176,12 +200,14 @@ namespace Excubo.Blazor.Grids
         {
             Grid.RenderNothingBut(this);
             ColumnSpan = ColumnSpan < 2 ? 2 : ColumnSpan + 1;
+            InvokeResizeEvents();
             _ = ColumnSpanChanged.InvokeAsync(ColumnSpan);
         }
         internal void IncreaseHeight()
         {
             Grid.RenderNothingBut(this);
             RowSpan = RowSpan < 2 ? 2 : RowSpan + 1;
+            InvokeResizeEvents();
             _ = RowSpanChanged.InvokeAsync(RowSpan);
             Grid.UpdateRows();
         }
@@ -189,12 +215,14 @@ namespace Excubo.Blazor.Grids
         {
             Grid.RenderNothingBut(this);
             ColumnSpan -= 1;
+            InvokeResizeEvents();
             _ = ColumnSpanChanged.InvokeAsync(ColumnSpan);
         }
         internal void DecreaseHeight()
         {
             Grid.RenderNothingBut(this);
             RowSpan -= 1;
+            InvokeResizeEvents();
             _ = RowSpanChanged.InvokeAsync(RowSpan);
             Grid.UpdateRows();
         }

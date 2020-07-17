@@ -10,11 +10,12 @@ Excubo.Blazor.Grids is a native-Blazor grid and dashboard component library.
 
 ## Key features
 
-- convenient usage of a css grid
-- aspect ratio
-- movable elements
-- resizable elements
+- Convenient usage of a css grid
+- Aspect ratio
+- Movable elements
+- Resizable elements
 - Easy way to add rows and columns, either individually or in bulk
+- Events on move or resize of elements
 
 ## How to use
 
@@ -25,17 +26,17 @@ Excubo.Blazor.Grids is distributed [via nuget.org](https://www.nuget.org/package
 
 #### Package Manager:
 ```ps
-Install-Package Excubo.Blazor.Grids -Version 1.1.0
+Install-Package Excubo.Blazor.Grids -Version 1.2.0
 ```
 
 #### .NET Cli:
 ```cmd
-dotnet add package Excubo.Blazor.Grids --version 1.1.0
+dotnet add package Excubo.Blazor.Grids --version 1.2.0
 ```
 
 #### Package Reference
 ```xml
-<PackageReference Include="Excubo.Blazor.Grids" Version="1.1.0" />
+<PackageReference Include="Excubo.Blazor.Grids" Version="1.2.0" />
 ```
 
 ### 2. Add the `Grid` (or a `Dashboard`) component to your app

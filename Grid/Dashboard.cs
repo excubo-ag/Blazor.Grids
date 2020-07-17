@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using System;
 using System.Collections.Generic;
 
 namespace Excubo.Blazor.Grids
@@ -16,9 +17,17 @@ namespace Excubo.Blazor.Grids
             builder.AddAttribute(5, nameof(Grid.ChildContent), ChildContent);
             builder.AddAttribute(6, nameof(Grid.ColumnGap), ColumnGap);
             builder.AddAttribute(7, nameof(Grid.RowGap), RowGap);
+            if (OnResize != null)
+            {
+                builder.AddAttribute(8, nameof(Grid.OnResize), OnResize);
+            }
+            if (OnMove != null)
+            {
+                builder.AddAttribute(9, nameof(Grid.OnMove), OnMove);
+            }
             if (AdditionalAttributes != null)
             {
-                builder.AddMultipleAttributes(8, AdditionalAttributes);
+                builder.AddMultipleAttributes(10, AdditionalAttributes);
             }
             builder.CloseComponent();
         }
@@ -54,6 +63,14 @@ namespace Excubo.Blazor.Grids
         /// The gap between columns.
         /// </summary>
         [Parameter] public string ColumnGap { get; set; } = "inherit";
+        /// <summary>
+        /// Callback for when an element is moved.
+        /// </summary>
+        [Parameter] public Action<Element> OnMove { get; set; }
+        /// <summary>
+        /// Callback for when an element is resized.
+        /// </summary>
+        [Parameter] public Action<Element> OnResize { get; set; }
         #endregion
 
     }

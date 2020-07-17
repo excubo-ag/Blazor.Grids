@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +55,14 @@ namespace Excubo.Blazor.Grids
         /// If enabled, the Grid manages the number of rows automatically. This is useful for the dashboard scenario where elements can be moved down as much as wanted, and the Grid just adds rows.
         /// </summary>
         [Parameter] public bool AutoRows { get; set; }
+        /// <summary>
+        /// Callback for when an element is moved.
+        /// </summary>
+        [Parameter] public Action<Element> OnMove { get; set; }
+        /// <summary>
+        /// Callback for when an element is resized.
+        /// </summary>
+        [Parameter] public Action<Element> OnResize { get; set; }
         #endregion
         #region internal API
         internal TitleSettings TitleSettings { get; set; } = new TitleSettings();
