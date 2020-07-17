@@ -114,5 +114,16 @@ namespace Excubo.Blazor.Grids
             }
             StateHasChanged();
         }
+        internal void RenderNothingBut(Element element)
+        {
+            foreach (var e in elements)
+            {
+                e.render_required = (e == element);
+            }
+        }
+        protected override Task OnAfterRenderAsync(bool firstRender)
+        {
+            return base.OnAfterRenderAsync(firstRender);
+        }
     }
 }

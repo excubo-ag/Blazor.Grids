@@ -148,44 +148,52 @@ namespace Excubo.Blazor.Grids
         }
         internal void MoveRight()
         {
+            Grid.RenderNothingBut(this);
             Column += 1;
             _ = ColumnChanged.InvokeAsync(Column);
         }
         internal void MoveLeft()
         {
+            Grid.RenderNothingBut(this);
             Column -= 1;
             _ = ColumnChanged.InvokeAsync(Column);
         }
         internal void MoveUp()
         {
+            Grid.RenderNothingBut(this);
             Row -= 1;
             Grid.UpdateRows();
             _ = RowChanged.InvokeAsync(Row);
         }
         internal void MoveDown()
         {
+            Grid.RenderNothingBut(this);
             Row += 1;
             Grid.UpdateRows();
             _ = RowChanged.InvokeAsync(Row);
         }
         internal void IncreaseWidth()
         {
+            Grid.RenderNothingBut(this);
             ColumnSpan = ColumnSpan < 2 ? 2 : ColumnSpan + 1;
             _ = ColumnSpanChanged.InvokeAsync(ColumnSpan);
         }
         internal void IncreaseHeight()
         {
+            Grid.RenderNothingBut(this);
             RowSpan = RowSpan < 2 ? 2 : RowSpan + 1;
             _ = RowSpanChanged.InvokeAsync(RowSpan);
             Grid.UpdateRows();
         }
         internal void DecreaseWidth()
         {
+            Grid.RenderNothingBut(this);
             ColumnSpan -= 1;
             _ = ColumnSpanChanged.InvokeAsync(ColumnSpan);
         }
         internal void DecreaseHeight()
         {
+            Grid.RenderNothingBut(this);
             RowSpan -= 1;
             _ = RowSpanChanged.InvokeAsync(RowSpan);
             Grid.UpdateRows();
