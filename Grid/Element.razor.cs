@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections.Generic;
 
 namespace Excubo.Blazor.Grids
 {
@@ -37,6 +38,9 @@ namespace Excubo.Blazor.Grids
         /// The title that should appear at the top of the element
         /// </summary>
         [Parameter] public string Title { get; set; }
+        [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
+        private object additional_style => AdditionalAttributes != null && AdditionalAttributes.ContainsKey("style") ? AdditionalAttributes["style"] : null;
+        private object additional_class => AdditionalAttributes != null && AdditionalAttributes.ContainsKey("class") ? AdditionalAttributes["class"] : null;
         /// <summary>
         /// Set the dimensions of the element
         /// </summary>
