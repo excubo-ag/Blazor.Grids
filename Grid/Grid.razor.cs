@@ -95,7 +95,7 @@ namespace Excubo.Blazor.Grids
                 var delta = max_row - row_definitions.Count;
                 if (delta > 0)
                 {
-                    row_definitions.AddRange(Enumerable.Range(0, delta).Select(_ => new RowDefinition()));
+                    row_definitions.AddRange(Enumerable.Range(0, delta).Select(_ => new RowDefinition { Height = "1fr" }));
                 }
                 else if (delta < 0)
                 {
