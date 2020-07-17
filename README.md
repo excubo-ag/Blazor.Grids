@@ -14,6 +14,7 @@ Excubo.Blazor.Grids is a native-Blazor grid and dashboard component library.
 - aspect ratio
 - movable elements
 - resizable elements
+- Easy way to add rows and columns, either individually or in bulk
 
 ## How to use
 
