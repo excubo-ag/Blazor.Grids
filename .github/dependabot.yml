@@ -6,7 +6,7 @@
 version: 2
 updates:
   - package-ecosystem: "nuget" # See documentation for possible values
-    directory: "/Diagram" # Location of package manifests
+    directory: "/Grid" # Location of package manifests
     schedule:
       interval: "daily"
   - package-ecosystem: "nuget" # See documentation for possible values
