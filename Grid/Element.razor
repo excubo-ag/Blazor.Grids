@@ -4,7 +4,7 @@
 <CascadingValue Value="this" IsFixed="true">
     @if (Grid.AspectRatio == null)
     {
-        <div style="border: 1px solid black; @column @row @additional_style" @attributes='AdditionalAttributes?.Where(kv => kv.Key != "style")'>
+        <div class="eg-elc @additional_class" style="@column @row @additional_style" @attributes='AdditionalAttributes?.Where(kv => kv.Key != "style" && kv.Key != "class")'>
             <Header />
             @ChildContent
         </div>

@@ -4,12 +4,12 @@
     width: 100%;
     height: 100%;
     position: relative;
+    border: 1px solid black;
 }
 /*Element*/
 .eg-el {
     display: grid;
     grid-template-rows: auto 1fr;
-    border: 1px solid black;
     width: 100%;
     height: 100%;
     position: absolute;

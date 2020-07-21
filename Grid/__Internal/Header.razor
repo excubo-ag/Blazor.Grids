@@ -4,13 +4,13 @@
 }
 @if (Element.Grid.AllowMove)
 {
-    <div @onmousemove="MovingAsync" @onmousedown="MouseDownAsync" @onmouseup="MouseUpAsync" style="cursor: move; border-bottom: 1px solid #202020;">
+    <div @onmousemove="MovingAsync" @onmousedown="MouseDownAsync" @onmouseup="MouseUpAsync" style="cursor: move; @Element.HeaderStyle">
         <Heading Text="@Element.Title" HeadingLevel="Element.Grid.TitleSettings.HeadingLevel" Alignment="Element.Grid.TitleSettings.Alignment" />
     </div>
 }
 else
 {
-    <div style="border-bottom: 1px solid #202020;">
+    <div style="@Element.HeaderStyle">
         <Heading Text="@Element.Title" HeadingLevel="Element.Grid.TitleSettings.HeadingLevel" Alignment="Element.Grid.TitleSettings.Alignment" />
     </div>
 }

@@ -46,6 +46,10 @@ namespace Excubo.Blazor.Grids
         /// Callback for when the element was resized.
         /// </summary>
         [Parameter] public Action OnResize { get; set; }
+        /// <summary>
+        /// The style of the header. Only visible if a Title is present. Defaults to a thin, dark line at the bottom of the header.
+        /// </summary>
+        [Parameter] public string HeaderStyle { get; set; } = "border-bottom: 1px solid #202020;";
         [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
         private object additional_style => AdditionalAttributes != null && AdditionalAttributes.ContainsKey("style") ? AdditionalAttributes["style"] : null;
         private object additional_class => AdditionalAttributes != null && AdditionalAttributes.ContainsKey("class") ? AdditionalAttributes["class"] : null;
