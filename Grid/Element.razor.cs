@@ -27,12 +27,14 @@ namespace Excubo.Blazor.Grids
         /// Any value less than 1 is interpreted as 1.
         /// </summary>
         [Parameter] public int ColumnSpan { get; set; }
+        internal int ActualColumnSpan => Math.Max(1, ColumnSpan);
         [Parameter] public EventCallback<int> ColumnSpanChanged { get; set; }
         /// <summary>
         /// The number of rows that this element should span.
         /// Any value less than 1 is interpreted as 1.
         /// </summary>
         [Parameter] public int RowSpan { get; set; }
+        internal int ActualRowSpan => Math.Max(1, RowSpan);
         [Parameter] public EventCallback<int> RowSpanChanged { get; set; }
         /// <summary>
         /// The title that should appear at the top of the element
@@ -68,9 +70,17 @@ namespace Excubo.Blazor.Grids
             {
                 throw new ArgumentException("Width of an element may not be zero or negative", nameof(width));
             }
+            var higher = height > ActualRowSpan;
+            var wider = width > ActualColumnSpan;
             RowSpan = height;
-            _ = RowSpanChanged.InvokeAsync(RowSpan);
             ColumnSpan = width;
+            if (higher || wider)
+            {
+                var push_direction = higher ? (1, 0) : (0, 1); // push elements downwards or rightwards
+                Grid.ResolveOverlaps(this, push_to: push_direction);
+            }
+            Grid.RenderNothingBut(this);
+            _ = RowSpanChanged.InvokeAsync(RowSpan);
             _ = ColumnSpanChanged.InvokeAsync(ColumnSpan);
             Grid.UpdateRows();
             InvokeResizeEvents();
@@ -91,8 +101,10 @@ namespace Excubo.Blazor.Grids
                 throw new ArgumentException("Column of an element may not be negative", nameof(column));
             }
             Row = row;
-            _ = RowChanged.InvokeAsync(Row);
             Column = column;
+            Grid.ResolveOverlaps(this, (-1, 0));
+            Grid.RenderNothingBut(this);
+            _ = RowChanged.InvokeAsync(Row);
             _ = ColumnChanged.InvokeAsync(Column);
             Grid.UpdateRows();
             InvokeMoveEvents();
@@ -150,7 +162,7 @@ namespace Excubo.Blazor.Grids
             Grid.Add(this);
             base.OnParametersSet();
         }
-        internal bool render_required { private get; set; } = true;
+        internal bool render_required { get; set; } = true;
         protected override bool ShouldRender()
         {
             if (!render_required)
@@ -172,63 +184,78 @@ namespace Excubo.Blazor.Grids
         }
         internal void MoveRight()
         {
-            Grid.RenderNothingBut(this);
             Column += 1;
+            Grid.ResolveOverlaps(this, (0, -1));
+            Grid.RenderNothingBut(this);
             InvokeMoveEvents();
             _ = ColumnChanged.InvokeAsync(Column);
         }
         internal void MoveLeft()
         {
-            Grid.RenderNothingBut(this);
             Column -= 1;
+            Grid.ResolveOverlaps(this, (0, 1));
+            Grid.RenderNothingBut(this);
             InvokeMoveEvents();
             _ = ColumnChanged.InvokeAsync(Column);
         }
         internal void MoveUp()
         {
-            Grid.RenderNothingBut(this);
             Row -= 1;
+            Grid.ResolveOverlaps(this, (1, 0));
+            Grid.RenderNothingBut(this);
             InvokeMoveEvents();
             Grid.UpdateRows();
             _ = RowChanged.InvokeAsync(Row);
         }
         internal void MoveDown()
         {
-            Grid.RenderNothingBut(this);
             Row += 1;
+            Grid.ResolveOverlaps(this, (-1, 0));
+            Grid.RenderNothingBut(this);
             InvokeMoveEvents();
             Grid.UpdateRows();
             _ = RowChanged.InvokeAsync(Row);
         }
         internal void IncreaseWidth()
         {
-            Grid.RenderNothingBut(this);
             ColumnSpan = ColumnSpan < 2 ? 2 : ColumnSpan + 1;
+            Grid.ResolveOverlaps(this, (0, 1));
+            Grid.RenderNothingBut(this);
             InvokeResizeEvents();
             _ = ColumnSpanChanged.InvokeAsync(ColumnSpan);
         }
         internal void IncreaseHeight()
         {
-            Grid.RenderNothingBut(this);
             RowSpan = RowSpan < 2 ? 2 : RowSpan + 1;
+            Grid.ResolveOverlaps(this, (1, 0));
+            Grid.RenderNothingBut(this);
             InvokeResizeEvents();
             _ = RowSpanChanged.InvokeAsync(RowSpan);
             Grid.UpdateRows();
         }
         internal void DecreaseWidth()
         {
-            Grid.RenderNothingBut(this);
             ColumnSpan -= 1;
+            Grid.RenderNothingBut(this);
             InvokeResizeEvents();
             _ = ColumnSpanChanged.InvokeAsync(ColumnSpan);
         }
         internal void DecreaseHeight()
         {
-            Grid.RenderNothingBut(this);
             RowSpan -= 1;
+            Grid.RenderNothingBut(this);
             InvokeResizeEvents();
             _ = RowSpanChanged.InvokeAsync(RowSpan);
             Grid.UpdateRows();
+        }
+        internal bool OverlapsWith(Element other)
+        {
+            // two elements overlap if the not not overlap, duh
+            // two elements do not overlap if one element is further to the left, top, right, or bottom than the other.
+            return !(other.Row + other.ActualRowSpan <= Row
+                  || other.Column + other.ActualColumnSpan <= Column
+                  || other.Row >= Row + ActualRowSpan
+                  || other.Column >= Column + ActualColumnSpan);
         }
     }
 }

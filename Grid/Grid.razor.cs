@@ -63,6 +63,10 @@ namespace Excubo.Blazor.Grids
         /// Callback for when an element is resized.
         /// </summary>
         [Parameter] public Action<Element> OnResize { get; set; }
+        /// <summary>
+        /// If enabled, moving or resizing an element will make sure that other elements flow away to make room for the moved/resized element.
+        /// </summary>
+        [Parameter] public bool PreventOverlaps { get; set; }
         #endregion
         #region internal API
         internal TitleSettings TitleSettings { get; set; } = new TitleSettings();
@@ -95,7 +99,7 @@ namespace Excubo.Blazor.Grids
                 var delta = max_row - row_definitions.Count;
                 if (delta > 0)
                 {
-                    row_definitions.AddRange(Enumerable.Range(0, delta).Select(_ => new RowDefinition { Height = "1fr" }));
+                    row_definitions.AddRange(Enumerable.Range(0, delta).Select(_ => new RowDefinition { Height = "minmax(1fr, auto)" }));
                 }
                 else if (delta < 0)
                 {
@@ -121,16 +125,77 @@ namespace Excubo.Blazor.Grids
             }
             StateHasChanged();
         }
+        private readonly List<Element> fixed_elements = new List<Element>();
+        internal void ResolveOverlaps(Element fixed_element, (int Row, int Col) push_to)
+        {
+            if (!PreventOverlaps)
+            {
+                return;
+            }
+            fixed_elements.Add(fixed_element);
+            while (true)
+            {
+                // we search for an overlapping element. There might be many, but if we move one, that might cause even more conflicts.
+                // Those are resolved before we could move the next, so we need to start the search for overlaps again.
+                var overlapping_element = elements.Except(fixed_elements).Where(e => e.OverlapsWith(fixed_element)).FirstOrDefault();
+                if (overlapping_element == null)
+                {
+                    break; // there are no more overlapping elements
+                }
+                FindNewPlace(overlapping_element, push_to);
+            }
+            fixed_elements.Remove(fixed_element);
+        }
+        private void FindNewPlace(Element element, (int Row, int Col) push_to)
+        {
+#pragma warning disable BL0005 // Component parameter should not be set outside of its component.
+            var pseudo_element = new Element { Row = element.Row, Column = element.Column, RowSpan = element.ActualRowSpan, ColumnSpan = element.ActualColumnSpan };
+#pragma warning restore BL0005 // Component parameter should not be set outside of its component.
+            // we try to move the element as little as possible. we therefore start searching around the original Row/Column and expand our "radius" from there.
+            // we traverse the possible positions in the following way (* denotes original position):
+            //
+            //    456
+            //    3*7
+            //    218
+            //   ...9
+            //
+            // the walking pattern therefore is d l u u r r d d d l l l, ...
+            // that pattern is always repeating the count of how often to walk in a certain direction twice [d l] [uu rr] [ddd lll] [uuuu rrrr] ....
+            (int Row, int Col) direction = push_to;
+            for (int count = 1; count < 8; ++count)
+            {
+                for (int r = 0; r < 2; ++r)
+                {
+                    for (int i = 0; i < count; ++i)
+                    {
+                        // walk into the direction
+                        pseudo_element.Row += direction.Row;
+                        pseudo_element.Column += direction.Col;
+                        // see whether this is a legal position
+                        if (pseudo_element.Row < 0 || pseudo_element.Column < 0 || pseudo_element.Column + pseudo_element.ActualColumnSpan > column_definitions.Count)
+                        {
+                            continue;
+                        }
+                        // since it is, let's see whether there is any overlap with the other elements:
+                        if (elements.Where(e => e != element).All(e => !pseudo_element.OverlapsWith(e)))
+                        {
+                            // we found a good new place! let's move the actual element and quit.
+                            element.MoveTo(pseudo_element.Row, pseudo_element.Column);
+                            return;
+                        }
+                    }
+                    direction = direction switch { (-1, 0) => (0, 1), (0, 1) => (1, 0), (1, 0) => (-1, 0) }; // change direction
+                }
+            }
+            // fallback:
+            element.MoveDown();
+        }
         internal void RenderNothingBut(Element element)
         {
-            foreach (var e in elements)
-            {
-                e.render_required = (e == element);
-            }
-        }
-        protected override Task OnAfterRenderAsync(bool firstRender)
-        {
-            return base.OnAfterRenderAsync(firstRender);
+            //foreach (var e in elements)
+            //{
+            //    e.render_required = (e == element);
+            //}
         }
     }
 }

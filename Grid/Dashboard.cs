@@ -17,17 +17,18 @@ namespace Excubo.Blazor.Grids
             builder.AddAttribute(5, nameof(Grid.ChildContent), ChildContent);
             builder.AddAttribute(6, nameof(Grid.ColumnGap), ColumnGap);
             builder.AddAttribute(7, nameof(Grid.RowGap), RowGap);
+            builder.AddAttribute(8, nameof(Grid.PreventOverlaps), true);
             if (OnResize != null)
             {
-                builder.AddAttribute(8, nameof(Grid.OnResize), OnResize);
+                builder.AddAttribute(9, nameof(Grid.OnResize), OnResize);
             }
             if (OnMove != null)
             {
-                builder.AddAttribute(9, nameof(Grid.OnMove), OnMove);
+                builder.AddAttribute(10, nameof(Grid.OnMove), OnMove);
             }
             if (AdditionalAttributes != null)
             {
-                builder.AddMultipleAttributes(10, AdditionalAttributes);
+                builder.AddMultipleAttributes(11, AdditionalAttributes);
             }
             builder.CloseComponent();
         }
@@ -36,12 +37,10 @@ namespace Excubo.Blazor.Grids
         /// <summary>
         /// Define all rows, columns and elements here:
         /// <br/>
-        /// &lt;Grid&gt;<br/>
-        /// &lt;RowDefinition Height="auto"/&gt;<br/>
-        /// &lt;ColumnDefinition Width="1fr"/&gt;<br/>
-        /// &lt;ColumnDefinition Width="1fr"/&gt;<br/>
+        /// &lt;Dashboard&gt;<br/>
+        /// &lt;Columns Count="n"&gt;/<br/>
         /// &lt;Element Column="1"&gt;content...&lt;/Element Column="1"&gt;<br/>
-        /// &lt;/Grid&gt;<br/>
+        /// &lt;/Dashboard&gt;<br/>
         /// </summary>
         [Parameter] public RenderFragment ChildContent { get; set; }
         /// <summary>
