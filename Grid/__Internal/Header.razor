@@ -1,16 +1,16 @@
-﻿@if (Element.Title == null)
+﻿@if (Title == null)
 {
     return;
 }
 @if (Element.Grid.AllowMove)
 {
     <div @onmousemove="MovingAsync" @onmousedown="MouseDownAsync" @onmouseup="MouseUpAsync" style="cursor: move; @Element.HeaderStyle">
-        <Heading Text="@Element.Title" HeadingLevel="Element.Grid.TitleSettings.HeadingLevel" Alignment="Element.Grid.TitleSettings.Alignment" />
+        <Heading Text="@Title" HeadingLevel="Element.Grid.TitleSettings.HeadingLevel" Alignment="Element.Grid.TitleSettings.Alignment" />
     </div>
 }
 else
 {
     <div style="@Element.HeaderStyle">
-        <Heading Text="@Element.Title" HeadingLevel="Element.Grid.TitleSettings.HeadingLevel" Alignment="Element.Grid.TitleSettings.Alignment" />
+        <Heading Text="@Title" HeadingLevel="Element.Grid.TitleSettings.HeadingLevel" Alignment="Element.Grid.TitleSettings.Alignment" />
     </div>
 }

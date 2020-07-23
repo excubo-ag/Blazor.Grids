@@ -150,7 +150,7 @@ namespace Excubo.Blazor.Grids
             Grid.Add(this);
             base.OnParametersSet();
         }
-        internal bool render_required = true;
+        internal bool render_required { private get; set; } = true;
         protected override bool ShouldRender()
         {
             if (!render_required)

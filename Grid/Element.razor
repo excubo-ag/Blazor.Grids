@@ -5,7 +5,7 @@
     @if (Grid.AspectRatio == null)
     {
         <div class="eg-elc @additional_class" style="@column @row @additional_style" @attributes='AdditionalAttributes?.Where(kv => kv.Key != "style" && kv.Key != "class")'>
-            <Header />
+            <Header Title="@Title" />
             @ChildContent
         </div>
     }
@@ -15,7 +15,7 @@
         var padding_bottom_s = padding_bottom.ToString(CultureInfo.InvariantCulture) + "%";
         <div class="eg-elc @additional_class" style="@column @row padding-bottom: @padding_bottom_s; @additional_style" @attributes='AdditionalAttributes?.Where(kv => kv.Key != "style" && kv.Key != "class")' @ref="Area">
             <div class="eg-el">
-                <Header />
+                <Header Title="@Title" />
                 <div class="eg-elbd">
                     @ChildContent
                 </div>
