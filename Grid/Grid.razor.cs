@@ -88,28 +88,6 @@ namespace Excubo.Blazor.Grids
         internal void Add(Element element)
         {
             elements.Add(element);
-            UpdateRows();
-        }
-        internal void UpdateRows()
-        {
-            // if we have "auto-rows", then see whether we have the right amount of rows
-            if (AutoRows && elements.Any())
-            {
-                var max_row = elements.Max(e => e.Row + Math.Max(1, e.RowSpan) - 1);
-                var delta = max_row - row_definitions.Count;
-                if (delta > 0)
-                {
-                    row_definitions.AddRange(Enumerable.Range(0, delta).Select(_ => new RowDefinition { Height = "minmax(1fr, auto)" }));
-                }
-                else if (delta < 0)
-                {
-                    row_definitions.RemoveRange(max_row, -delta);
-                }
-                if (delta != 0)
-                {
-                    ReRenderSelfButNoChild();
-                }
-            }
         }
         #endregion
         private object additional_style => AdditionalAttributes == null || !AdditionalAttributes.ContainsKey("style") ? null : AdditionalAttributes["style"];

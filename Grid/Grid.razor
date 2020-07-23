@@ -1,20 +1,30 @@
 ﻿@using Excubo.Blazor.Grids.__Internal
+@using System.Globalization 
 <Excubo.Blazor.LazyStyleSheet.Stylesheet Src="_content/Excubo.Blazor.Grids/style.min.css" />
-<CascadingValue Value="this" IsFixed="true">
-    <div style="
-            display: grid;
+<div style="display: grid;
             position: relative;
             grid-template-columns: @(string.Join(" ", column_definitions.Select(d => d.Width)));
             grid-template-rows: @(string.Join(" ", row_definitions.Select(d => d.Height)));
             grid-column-gap: @ColumnGap;
             grid-row-gap: @RowGap;
             @additional_style"
-         @attributes="@additional_attribues_without_style"
-         @ref="Area">
+     @attributes="@additional_attribues_without_style"
+     @ref="Area">
+    <CascadingValue Value="this" IsFixed="true">
         @ChildContent
-        <MovingIndicatorOverlay @ref="MovingIndicatorOverlay"/>
-    </div>
-</CascadingValue>
+        <MovingIndicatorOverlay @ref="MovingIndicatorOverlay" />
+    </CascadingValue>
+    @if (AutoRows && elements.Any())
+    {
+        var n_rows = elements.Max(e => e.Row + Math.Max(1, e.RowSpan) - 1);
+        var padding_bottom = 100.0 / AspectRatio.Value;
+        var padding_bottom_s = padding_bottom.ToString(CultureInfo.InvariantCulture) + "%";
+        for (int i = 0; i < n_rows; ++i)
+        {
+            <div style="grid-row: @(i + 1); padding-bottom: @padding_bottom_s" />
+        }
+    }
+</div>
 
 @code {
     internal ElementReference Area;

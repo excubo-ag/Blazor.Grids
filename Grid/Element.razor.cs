@@ -82,7 +82,6 @@ namespace Excubo.Blazor.Grids
             Grid.RenderNothingBut(this);
             _ = RowSpanChanged.InvokeAsync(RowSpan);
             _ = ColumnSpanChanged.InvokeAsync(ColumnSpan);
-            Grid.UpdateRows();
             InvokeResizeEvents();
         }
         /// <summary>
@@ -106,7 +105,6 @@ namespace Excubo.Blazor.Grids
             Grid.RenderNothingBut(this);
             _ = RowChanged.InvokeAsync(Row);
             _ = ColumnChanged.InvokeAsync(Column);
-            Grid.UpdateRows();
             InvokeMoveEvents();
         }
         #endregion
@@ -204,7 +202,6 @@ namespace Excubo.Blazor.Grids
             Grid.ResolveOverlaps(this, (1, 0));
             Grid.RenderNothingBut(this);
             InvokeMoveEvents();
-            Grid.UpdateRows();
             _ = RowChanged.InvokeAsync(Row);
         }
         internal void MoveDown()
@@ -213,7 +210,6 @@ namespace Excubo.Blazor.Grids
             Grid.ResolveOverlaps(this, (-1, 0));
             Grid.RenderNothingBut(this);
             InvokeMoveEvents();
-            Grid.UpdateRows();
             _ = RowChanged.InvokeAsync(Row);
         }
         internal void IncreaseWidth()
@@ -231,7 +227,6 @@ namespace Excubo.Blazor.Grids
             Grid.RenderNothingBut(this);
             InvokeResizeEvents();
             _ = RowSpanChanged.InvokeAsync(RowSpan);
-            Grid.UpdateRows();
         }
         internal void DecreaseWidth()
         {
@@ -246,7 +241,6 @@ namespace Excubo.Blazor.Grids
             Grid.RenderNothingBut(this);
             InvokeResizeEvents();
             _ = RowSpanChanged.InvokeAsync(RowSpan);
-            Grid.UpdateRows();
         }
         internal bool OverlapsWith(Element other)
         {
