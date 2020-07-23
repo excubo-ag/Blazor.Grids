@@ -168,12 +168,21 @@ namespace Excubo.Blazor.Grids
             // fallback:
             element.MoveDown();
         }
+
+        private readonly List<Element> render_elements = new List<Element>();
         internal void RenderNothingBut(Element element)
         {
-            //foreach (var e in elements)
-            //{
-            //    e.render_required = (e == element);
-            //}
+            if (!render_elements.Any())
+            {
+                elements.ForEach(e => e.render_required = false);
+            }
+            render_elements.Add(element);
+            element.render_required = true;
+        }
+        protected override void OnAfterRender(bool firstRender)
+        {
+            render_elements.Clear();
+            base.OnAfterRender(firstRender);
         }
     }
 }
