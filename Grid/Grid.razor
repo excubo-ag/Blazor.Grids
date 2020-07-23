@@ -3,8 +3,9 @@
 <Excubo.Blazor.LazyStyleSheet.Stylesheet Src="_content/Excubo.Blazor.Grids/style.min.css" />
 <div style="display: grid;
             position: relative;
-            grid-template-columns: @(string.Join(" ", column_definitions.Select(d => d.Width)));
-            grid-template-rows: @(string.Join(" ", row_definitions.Select(d => d.Height)));
+            @(column_definitions.Any() ? ("grid-template-columns: " + string.Join(" ", column_definitions.Select(d => d.Width))): "");
+            @(row_definitions.Any() ? ("grid-template-rows: " + string.Join(" ", row_definitions.Select(d => d.Height))) : "");
+            @(areas.Any() ? ("grid-template-areas: " + AreaString) : "");
             grid-column-gap: @ColumnGap;
             grid-row-gap: @RowGap;
             @additional_style"

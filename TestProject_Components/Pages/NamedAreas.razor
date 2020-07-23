@@ -1,0 +1,81 @@
+﻿@page "/named_areas"
+
+@code {
+    private bool mobile { get; set; }
+    private int sidebar_height { get; set; } = 3;
+    private int sidebar_width { get; set; } = 1;
+    private int content_height { get; set; } = 2;
+    private int content_row { get; set; } = 1;
+    private int offset_left { get; set; } = 1;
+    private int width { get; set; } = 2;
+    private void ToggleLayout()
+    {
+        if (mobile)
+        {
+            sidebar_height = 3;
+            sidebar_width = 1;
+            content_row = 1;
+            content_height = 2;
+            offset_left = 1;
+            width = 2;
+            mobile = false;
+        }
+        else
+        {
+            sidebar_height = 1;
+            sidebar_width = 3;
+            content_row = 2;
+            content_height = 1;
+            offset_left = 0;
+            width = 3;
+            mobile = true;
+        }
+    }
+}
+
+<Grid style="height: 100%; width: 100%;">
+    <RowDefinition Height="auto" />
+    <RowDefinition Height="1fr" />
+    <Element>
+        Named areas can help to place items according to function, not row/column.<br />
+        <code>
+            &lt;Area Row="1" RowSpan="@sidebar_height" Column="0" ColumnSpan="@sidebar_width" Name="SideBar" /&gt;<br />
+            &lt;Area Row="0" Column="@offset_left" ColumnSpan="@width" Name="AppBar" /&gt;<br />
+            &lt;Area Row="@content_row" RowSpan="@content_height" Column="@offset_left" ColumnSpan="@width" Name="Content" /&gt;<br />
+            &lt;Area Row="3" Column="@offset_left" ColumnSpan="@width" Name="Footer" /&gt;<br />
+        </code>
+        <button @onclick="ToggleLayout">Toggle between desktop and mobile layout</button>
+    </Element>
+    <Element Row="1">
+        <Grid style="height: 100%; width: 100%">
+            <ColumnDefinition Width="minmax(150px, 20%)" />
+            <Columns Count="2" Width="1fr" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="1fr" />
+            <RowDefinition Height="auto" /><!--the footer-->
+            <Area Row="1" RowSpan="@sidebar_height" Column="0" ColumnSpan="@sidebar_width" Name="SideBar" />
+            <Area Row="0" Column="@offset_left" ColumnSpan="@width" Name="AppBar" />
+            <Area Row="@content_row" RowSpan="@content_height" Column="@offset_left" ColumnSpan="@width" Name="Content" />
+            <Area Row="3" Column="@offset_left" ColumnSpan="@width" Name="Footer" />
+            <Element Area="SideBar" style="background-color: turquoise">
+                My sidebar for navigation or anything you (or I?) want. This section will be at least 150px wide, and take up at most 20% of your horizontal space.
+            </Element>
+            <Element Area="Content" style="background-color: lavender">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin iaculis auctor nisi in cursus. Maecenas gravida turpis vitae iaculis fermentum. Nam imperdiet nibh nec pretium aliquam. Phasellus viverra lacus et tellus facilisis tincidunt. Aenean consectetur magna sit amet nulla imperdiet, quis semper purus tempor. Curabitur non dui vestibulum, accumsan ante vitae, sodales felis. Aliquam egestas mi id finibus gravida. Aliquam sapien eros, sagittis eget elit vel, porta porta orci. Ut suscipit augue a dolor laoreet ornare. Suspendisse eget diam tortor. Donec eget lacus id erat gravida accumsan eu a elit. Maecenas diam augue, luctus euismod purus vitae, luctus aliquet lorem. Fusce elit nulla, blandit in vulputate ac, euismod at sem. Etiam et cursus lacus, id dapibus tortor.</p>
+                <p>Aenean pharetra sit amet dui et venenatis. Vivamus rutrum tellus interdum augue maximus porttitor. Aliquam urna sapien, iaculis a pharetra nec, fermentum sit amet massa. Mauris sollicitudin neque ligula, ac dictum dolor fermentum ut. Etiam non egestas dolor. Vestibulum feugiat neque magna, quis iaculis mauris porta quis. Vestibulum lorem orci, luctus non sapien sed, lobortis bibendum arcu. Vivamus sagittis lacus nec orci consequat varius. Pellentesque scelerisque eleifend magna, id condimentum felis auctor at.</p>
+                <p>Curabitur sit amet lectus sit amet elit laoreet tristique id in mauris. Fusce sit amet finibus dui. Vivamus ultrices augue venenatis diam consequat vestibulum. Pellentesque lobortis, ligula at pellentesque placerat, elit neque semper tortor, ut vehicula massa orci sit amet lorem. Vestibulum gravida ante sapien, et suscipit augue molestie quis. Vestibulum ac metus sed purus rutrum vehicula et vel nunc. Nullam eu condimentum purus. Aliquam erat volutpat. Ut tristique turpis eu porta molestie. Vivamus ac sem tortor. Duis placerat tellus gravida, euismod orci sed, malesuada purus. Sed tincidunt, neque id iaculis ultrices, quam libero ultrices magna, vel eleifend turpis justo sed diam. Nulla in sagittis elit.</p>
+                <p>Vivamus quis augue tempus nibh pretium aliquet. Aliquam mattis ut nisl et rutrum. Donec a tortor pretium, dictum nisi nec, pulvinar felis. Praesent consectetur aliquet hendrerit. Suspendisse eu felis ex. Aliquam efficitur, lectus quis suscipit vehicula, nibh turpis gravida metus, fringilla euismod nibh quam ut libero. Phasellus eu quam scelerisque, tristique lectus quis, luctus dolor. Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis suscipit, nisl id consectetur interdum, metus dolor mollis tortor, sit amet mattis dui lorem vel quam. Sed id varius est. Aenean lorem turpis, molestie suscipit vehicula eu, euismod vitae tortor. Donec ultricies erat enim, vel vehicula libero malesuada in. Fusce sodales, lorem ut aliquam pretium, leo turpis convallis felis, vitae maximus lectus lectus et magna. Vivamus augue ex, eleifend et dui id, fermentum bibendum neque. Donec ultricies varius placerat. Quisque ac erat vitae velit vehicula consequat.</p>
+                <p>Phasellus euismod sit amet nibh a ultricies. In bibendum consectetur tortor. Praesent ut felis tortor. Morbi erat dolor, vestibulum quis facilisis non, auctor nec urna. Etiam risus lorem, ultricies aliquam viverra id, lobortis sed enim. Phasellus in congue quam. Maecenas dolor mauris, tincidunt eget eleifend vel, laoreet sit amet orci. Duis sit amet vehicula enim. Praesent eget ultrices neque.</p>
+            </Element>
+            <Element Area="AppBar" style="background-color: aliceblue">
+                The top row of your layout. The height of this section is enough to keep this content, but not more.
+            </Element>
+            <Element Area="Footer" style="background-color: firebrick">
+                Does anyone ever look here? Usually just some legal stuff...  The height of this section is enough to keep this content, but not more.
+            </Element>
+        </Grid>
+
+    </Element>
+</Grid>
+

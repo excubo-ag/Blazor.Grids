@@ -85,6 +85,32 @@ namespace Excubo.Blazor.Grids
             ReRenderSelfButNoChild();
             return index;
         }
+        internal void Add(Area area)
+        {
+            if (!areas.Contains(area))
+            {
+                areas.Add(area);
+            }
+        }
+        private string AreaString
+        {
+            get
+            {
+                return string.Join(" ", Enumerable.Range(0, row_definitions.Count).Select(r =>
+                {
+                    var row = string.Join(" ", Enumerable.Range(0, column_definitions.Count).Select(c =>
+                    {
+                        var match = areas.FirstOrDefault(a => a.Row <= r && r < a.Row + a.ActualRowSpan && a.Column <= c && c < a.Column + a.ActualColumnSpan);
+                        return match?.Name ?? ".";
+                    }));
+                    return "'" + row + "'";
+                }));
+            }
+        }
+        internal void UpdateArea()
+        {
+            ReRenderSelfButNoChild();
+        }
         internal void Add(Element element)
         {
             if (!elements.Contains(element))
@@ -97,6 +123,7 @@ namespace Excubo.Blazor.Grids
         private IEnumerable<KeyValuePair<string, object>> additional_attribues_without_style => AdditionalAttributes?.Where(kv => kv.Key != "style");
         private readonly List<RowDefinition> row_definitions = new List<RowDefinition>();
         private readonly List<ColumnDefinition> column_definitions = new List<ColumnDefinition>();
+        private readonly List<Area> areas = new List<Area>();
         private readonly List<Element> elements = new List<Element>();
         private void ReRenderSelfButNoChild()
         {

@@ -47,8 +47,8 @@ namespace Excubo.Blazor.Grids.__Internal
             if (start_position == null)
             {
                 (grid_position.Left, grid_position.Top) = await js.GetPositionAsync(Element.Grid.Area);
-                (element_position.Left, element_position.Top) = await js.GetPositionAsync(Element.Area);
-                (element_dimension.Width, element_dimension.Height) = await js.GetDimensionAsync(Element.Area);
+                (element_position.Left, element_position.Top) = await js.GetPositionAsync(Element.ElementContainer);
+                (element_dimension.Width, element_dimension.Height) = await js.GetDimensionAsync(Element.ElementContainer);
                 start_position = (X: e.ClientX, Y: e.ClientY); // setting this last assures that all other values are already set, which is important in the else branch.
                 Element.Grid.MovingIndicatorOverlay.SetSize(element_dimension.Width, element_dimension.Height);
                 Element.Grid.MovingIndicatorOverlay.Set(this);

@@ -52,6 +52,10 @@ namespace Excubo.Blazor.Grids
         /// The style of the header. Only visible if a Title is present. Defaults to a thin, dark line at the bottom of the header.
         /// </summary>
         [Parameter] public string HeaderStyle { get; set; } = "border-bottom: 1px solid #202020;";
+        /// <summary>
+        /// The name of the area this element should be a part of.
+        /// </summary>
+        [Parameter] public string Area { get; set; }
         [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
         private object additional_style => AdditionalAttributes != null && AdditionalAttributes.ContainsKey("style") ? AdditionalAttributes["style"] : null;
         private object additional_class => AdditionalAttributes != null && AdditionalAttributes.ContainsKey("class") ? AdditionalAttributes["class"] : null;
@@ -110,10 +114,15 @@ namespace Excubo.Blazor.Grids
         #endregion
         private int actual_column_span => ColumnSpan < 2 ? 1 : ColumnSpan;
         private int actual_row_span => RowSpan < 2 ? 1 : RowSpan;
+        private string area => string.IsNullOrEmpty(Area) ? null : $"grid-area: {Area};";
         private string column
         {
             get
             {
+                if (!string.IsNullOrEmpty(Area))
+                {
+                    return null;
+                }
                 if (Column == 0)
                 {
                     if (ColumnSpan < 2)
@@ -136,6 +145,10 @@ namespace Excubo.Blazor.Grids
         {
             get
             {
+                if (!string.IsNullOrEmpty(Area))
+                {
+                    return null;
+                }
                 if (Row == 0)
                 {
                     if (RowSpan < 2)
