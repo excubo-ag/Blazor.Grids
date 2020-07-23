@@ -162,7 +162,7 @@ namespace Excubo.Blazor.Grids
                             return;
                         }
                     }
-                    direction = direction switch { (-1, 0) => (0, 1), (0, 1) => (1, 0), (1, 0) => (-1, 0) }; // change direction
+                    direction = direction switch { (-1, 0) => (0, 1), (0, 1) => (1, 0), (1, 0) => (0, -1), (0, -1) => (-1, 0) }; // change direction
                 }
             }
             // fallback:
