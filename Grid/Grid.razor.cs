@@ -87,7 +87,10 @@ namespace Excubo.Blazor.Grids
         }
         internal void Add(Element element)
         {
-            elements.Add(element);
+            if (!elements.Contains(element))
+            {
+                elements.Add(element);
+            }
         }
         #endregion
         private object additional_style => AdditionalAttributes == null || !AdditionalAttributes.ContainsKey("style") ? null : AdditionalAttributes["style"];
