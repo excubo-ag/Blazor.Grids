@@ -184,6 +184,13 @@ namespace Excubo.Blazor.Grids
         }
         protected override void OnAfterRender(bool firstRender)
         {
+            if (firstRender)
+            {
+                foreach (var element in elements)
+                {
+                    ResolveOverlaps(element, (1, 0));
+                }
+            }
             render_elements.Clear();
             base.OnAfterRender(firstRender);
         }
