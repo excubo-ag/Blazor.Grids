@@ -26,17 +26,17 @@ Excubo.Blazor.Grids is distributed [via nuget.org](https://www.nuget.org/package
 
 #### Package Manager:
 ```ps
-Install-Package Excubo.Blazor.Grids -Version 1.3.1
+Install-Package Excubo.Blazor.Grids -Version 1.4.0
 ```
 
 #### .NET Cli:
 ```cmd
-dotnet add package Excubo.Blazor.Grids --version 1.3.1
+dotnet add package Excubo.Blazor.Grids --version 1.4.0
 ```
 
 #### Package Reference
 ```xml
-<PackageReference Include="Excubo.Blazor.Grids" Version="1.3.1" />
+<PackageReference Include="Excubo.Blazor.Grids" Version="1.4.0" />
 ```
 
 ### 2. Add the `Grid` (or a `Dashboard`) component to your app
@@ -68,8 +68,7 @@ or create a dashboard:
 
 ```html
 @using Excubo.Blazor.Grids
-<Dashboard AspectRatio="1.5">
-    <Columns Count="6" />
+<Dashboard AspectRatio="1.5" ColumnCount="6">
     <Element Column="0" Row="0" Title="A heading">
         I'm in a dashboard, therefore movable and resizable.
     </Element>
