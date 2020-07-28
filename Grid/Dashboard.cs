@@ -20,8 +20,8 @@ namespace Excubo.Blazor.Grids
                 RenderFragment columns_and_childcontent = (builder2) =>
                 {
                     builder2.OpenComponent<Columns>(0);
-                    builder2.AddAttribute(1, nameof(Grids.Columns.Count), ColumnCount);
-                    builder2.AddAttribute(2, nameof(Grids.Columns.Width), "1fr");
+                    builder2.AddAttribute(1, nameof(Columns.Count), ColumnCount);
+                    builder2.AddAttribute(2, nameof(Columns.Width), "1fr");
                     builder2.CloseComponent();
                     builder2.AddContent(3, ChildContent);
                 };
