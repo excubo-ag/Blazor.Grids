@@ -4,16 +4,16 @@
 <CascadingValue Value="this" IsFixed="true">
     @if (Grid.AspectRatio == null)
     {
-        <div class="eg-elc @additional_class" style="@area @column @row @additional_style" @attributes='AdditionalAttributes?.Where(kv => kv.Key != "style" && kv.Key != "class")'>
-            <Header Title="@Title" />
-            @ChildContent
-        </div>
+    <div class="eg-elc @Grid.ElementClass @additional_class" style="@Grid.ElementStyle; @additional_style; @area @column @row " @attributes='AdditionalAttributes?.Where(kv => kv.Key != "style" && kv.Key != "class")'>
+        <Header Title="@Title" />
+        @ChildContent
+    </div>
     }
     else
     {
         var padding_bottom = 100.0 / Grid.AspectRatio.Value * actual_row_span / actual_column_span;
         var padding_bottom_s = padding_bottom.ToString(CultureInfo.InvariantCulture) + "%";
-        <div class="eg-elc @additional_class" style="@area @column @row padding-bottom: @padding_bottom_s; @additional_style" @attributes='AdditionalAttributes?.Where(kv => kv.Key != "style" && kv.Key != "class")' @ref="ElementContainer">
+        <div class="eg-elc @Grid.ElementClass @additional_class" style="@Grid.ElementStyle; @additional_style; @area @column @row padding-bottom: @padding_bottom_s; " @attributes='AdditionalAttributes?.Where(kv => kv.Key != "style" && kv.Key != "class")' @ref="ElementContainer">
             <div class="eg-el">
                 <Header Title="@Title" />
                 <div class="eg-elbd">

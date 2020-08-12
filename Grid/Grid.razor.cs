@@ -67,6 +67,14 @@ namespace Excubo.Blazor.Grids
         /// If enabled, moving or resizing an element will make sure that other elements flow away to make room for the moved/resized element.
         /// </summary>
         [Parameter] public bool PreventOverlaps { get; set; }
+        /// <summary>
+        /// To control CSS classes of all elements uniformily, assign the classes to this property. Classes defined on the Element directly take precedence.
+        /// </summary>
+        [Parameter] public string ElementClass { get; set; }
+        /// <summary>
+        /// To control styles of all elements uniformily, assign the styles to this property. Styles defined on the Element directly take precedence.
+        /// </summary>
+        [Parameter] public string ElementStyle { get; set; }
         #endregion
         #region internal API
         internal TitleSettings TitleSettings { get; set; } = new TitleSettings();

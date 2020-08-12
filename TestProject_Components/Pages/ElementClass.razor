@@ -1,0 +1,21 @@
+﻿@page "/element_class"
+
+In this demo, the element styles are set by using <code>ElementClass/Style</code> uniformily as properties of the Grid.
+
+<Grid RowGap="1em" ColumnGap="1em" AspectRatio="1.4" ElementClass="foo" ElementStyle="border: none; box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0,0,0,.12); background-color: whitesmoke">
+    <TitleSettings HeadingLevel="4" Alignment="Alignment.Left" />
+    <Rows Count="4" />
+    <Columns Count="4" />
+    <Element Column="0" Row="0" Title="Hello">
+        <div style="min-width: 2em; min-height: 2em"></div>
+    </Element>
+    <Element Column="0" Row="1" Title="World">
+        <div style="min-width: 2em; min-height: 2em"></div>
+    </Element>
+    <Element Column="1" Row="1" Title="A title">
+        <div style="min-width: 2em; min-height: 2em"></div>
+    </Element>
+    <Element Column="1" Row="0" Title="Another one">
+        <div style="min-width: 2em; min-height: 2em"></div>
+    </Element>
+</Grid>

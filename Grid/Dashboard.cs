@@ -42,9 +42,17 @@ namespace Excubo.Blazor.Grids
             {
                 builder.AddAttribute(10, nameof(Grid.OnMove), OnMove);
             }
+            if (ElementClass != null)
+            {
+                builder.AddAttribute(11, nameof(Grid.ElementClass), ElementClass);
+            }
+            if (ElementStyle != null)
+            {
+                builder.AddAttribute(12, nameof(Grid.ElementStyle), ElementStyle);
+            }
             if (AdditionalAttributes != null)
             {
-                builder.AddMultipleAttributes(11, AdditionalAttributes);
+                builder.AddMultipleAttributes(13, AdditionalAttributes);
             }
             builder.CloseComponent();
         }
@@ -90,6 +98,14 @@ namespace Excubo.Blazor.Grids
         /// The number of columns in the dashboard. If unspecified, you also have to explicitely manage the columns, e.g. by adding &lt;Columns Count="4" Width="1fr"/&gt; to the dashboard.
         /// </summary>
         [Parameter] public int ColumnCount { get; set; }
+        /// <summary>
+        /// To control CSS classes of all elements uniformily, assign the classes to this property. Classes defined on the Element directly take precedence.
+        /// </summary>
+        [Parameter] public string ElementClass { get; set; }
+        /// <summary>
+        /// To control styles of all elements uniformily, assign the styles to this property. Styles defined on the Element directly take precedence.
+        /// </summary>
+        [Parameter] public string ElementStyle { get; set; }
         #endregion
 
     }
