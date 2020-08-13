@@ -75,7 +75,7 @@ or create a dashboard:
 </Dashboard>
 ```
 
-Have a look at the fully working examples provided in [the sample project](https://github.com/excubo-ag/Blazor.Grids/tree/master/TestProject_Components).
+Have a look at the fully working examples provided in [the sample project](https://github.com/excubo-ag/Blazor.Grids/tree/main/TestProject_Components).
 
 ## Design principles
 
