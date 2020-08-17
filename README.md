@@ -1,8 +1,8 @@
 ## Excubo.Blazor.Grids
 
-![Nuget](https://img.shields.io/nuget/v/Excubo.Blazor.Grids)
-![Nuget](https://img.shields.io/nuget/dt/Excubo.Blazor.Grids)
-![GitHub](https://img.shields.io/github/license/excubo-ag/Blazor.Grids)
+[![Nuget](https://img.shields.io/nuget/v/Excubo.Blazor.Grids)](https://www.nuget.org/packages/Excubo.Blazor.Grids/)
+[![Nuget](https://img.shields.io/nuget/dt/Excubo.Blazor.Grids)](https://www.nuget.org/packages/Excubo.Blazor.Grids/)
+[![GitHub](https://img.shields.io/github/license/excubo-ag/Blazor.Grids)](https://github.com/excubo-ag/Blazor.Grids)
 
 Excubo.Blazor.Grids is a native-Blazor grid and dashboard component library.
 
@@ -22,7 +22,7 @@ Excubo.Blazor.Grids is a native-Blazor grid and dashboard component library.
 ### 1. Install the nuget package Excubo.Blazor.Grids
 
 Excubo.Blazor.Grids is distributed [via nuget.org](https://www.nuget.org/packages/Excubo.Blazor.Grids/).
-![Nuget](https://img.shields.io/nuget/v/Excubo.Blazor.Grids)
+[![Nuget](https://img.shields.io/nuget/v/Excubo.Blazor.Grids)](https://www.nuget.org/packages/Excubo.Blazor.Grids/)
 
 #### Package Manager:
 ```ps
