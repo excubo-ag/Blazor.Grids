@@ -1,4 +1,5 @@
 ﻿@page "/no_overlapping_elements"
+<SourceCodeLink Repository="Blazor.Grids" Page="@(nameof(PreventOverlapElements))" />
 In this demo, all elements are <a href="movable_elements">movable</a> and <a href="resizable_elements">resizable</a>, and we also prevent any two elements from overlapping.
 Important: This feature only works if an <a href="aspect_ratio">AspectRatio</a> is set.
 
@@ -23,7 +24,7 @@ Important: This feature only works if an <a href="aspect_ratio">AspectRatio</a> 
         public string Color { get; set; }
     }
     private List<ElementDefinition> elements = new List<ElementDefinition>
-    {
+{
         new ElementDefinition { Row = 0, Column = 0, Color = "purple" },
         new ElementDefinition { Row = 0, Column = 1, Color = "gray" },
         new ElementDefinition { Row = 1, Column = 0, Color = "pink" },

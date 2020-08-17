@@ -1,4 +1,5 @@
 ﻿@page "/dashboard"
+<SourceCodeLink Repository="Blazor.Grids" Page="@(nameof(DashboardDemo))" />
 
 A dashboard is a grid that sets an <a href="aspect_ratio">AspectRatio</a>, <a href="movable_elements">AllowMove</a>, <a href="resizable_elements">AllowResize</a>, and AutoRows.
 This dashboard has four columns.
@@ -9,7 +10,7 @@ This dashboard has four columns.
         <Element @bind-Row="element.Row" @bind-Column="element.Column" @bind-RowSpan="element.RowSpan" @bind-ColumnSpan="element.ColumnSpan"
                  Title="@element.Color"
                  style="border: none; box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0,0,0,.12)">
-                @*The style above gives the element material style*@
+            @*The style above gives the element material style*@
             <div style="height: 100%; width: 100%; background-color: @(element.Color)"></div>
         </Element>
     }
@@ -25,7 +26,7 @@ This dashboard has four columns.
         public string Color { get; set; }
     }
     private List<ElementDefinition> elements = new List<ElementDefinition>
-    {
+{
         new ElementDefinition { Row = 0, Column = 0, Color = "purple" },
         new ElementDefinition { Row = 0, Column = 1, Color = "gray" },
         new ElementDefinition { Row = 1, Column = 0, Color = "pink" },

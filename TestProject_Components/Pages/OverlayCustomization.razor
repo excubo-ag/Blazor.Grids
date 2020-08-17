@@ -1,4 +1,5 @@
 ﻿@page "/overlay_customization"
+<SourceCodeLink Repository="Blazor.Grids" Page="@(nameof(OverlayCustomization))" />
 The branding of your app might require different colors. In this demo, we modify the color of the overlay that appears when elements are <a href="movable_elements">moved</a> or <a href="resizable_elements">resized</a>.
 
 <Grid AspectRatio="1.5" AllowMove="true" AllowResize="true" style="height: 100%">
@@ -23,7 +24,7 @@ The branding of your app might require different colors. In this demo, we modify
         public string Color { get; set; }
     }
     private List<ElementDefinition> elements = new List<ElementDefinition>
-    {
+{
         new ElementDefinition { Row = 0, Column = 0, Color = "purple" },
         new ElementDefinition { Row = 0, Column = 1, Color = "gray" },
         new ElementDefinition { Row = 1, Column = 0, Color = "pink" },
