@@ -13,11 +13,6 @@
 
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <ProjectReference Include="..\Grid\Blazor.Grids.csproj" />
   </ItemGroup>
 
