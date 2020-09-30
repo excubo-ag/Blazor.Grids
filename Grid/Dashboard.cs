@@ -89,11 +89,11 @@ namespace Excubo.Blazor.Grids
         /// <summary>
         /// Callback for when an element is moved.
         /// </summary>
-        [Parameter] public Action<Element> OnMove { get; set; }
+        [Parameter] public Action<ElementMoveArgs> OnMove { get; set; }
         /// <summary>
         /// Callback for when an element is resized.
         /// </summary>
-        [Parameter] public Action<Element> OnResize { get; set; }
+        [Parameter] public Action<ElementResizeArgs> OnResize { get; set; }
         /// <summary>
         /// The number of columns in the dashboard. If unspecified, you also have to explicitely manage the columns, e.g. by adding &lt;Columns Count="4" Width="1fr"/&gt; to the dashboard.
         /// </summary>

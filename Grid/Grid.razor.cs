@@ -58,11 +58,11 @@ namespace Excubo.Blazor.Grids
         /// <summary>
         /// Callback for when an element is moved.
         /// </summary>
-        [Parameter] public Action<Element> OnMove { get; set; }
+        [Parameter] public Action<ElementMoveArgs> OnMove { get; set; }
         /// <summary>
         /// Callback for when an element is resized.
         /// </summary>
-        [Parameter] public Action<Element> OnResize { get; set; }
+        [Parameter] public Action<ElementResizeArgs> OnResize { get; set; }
         /// <summary>
         /// If enabled, moving or resizing an element will make sure that other elements flow away to make room for the moved/resized element.
         /// </summary>
@@ -142,7 +142,7 @@ namespace Excubo.Blazor.Grids
             StateHasChanged();
         }
         private readonly List<Element> fixed_elements = new List<Element>();
-        internal void ResolveOverlaps(Element fixed_element, (int Row, int Col) push_to)
+        internal async Task ResolveOverlapsAsync(Element fixed_element, (int Row, int Col) push_to)
         {
             if (!PreventOverlaps)
             {
@@ -158,14 +158,14 @@ namespace Excubo.Blazor.Grids
                 {
                     break; // there are no more overlapping elements
                 }
-                FindNewPlace(overlapping_element, push_to);
+                await FindNewPlaceAsync(overlapping_element, push_to);
             }
             fixed_elements.Remove(fixed_element);
         }
-        private void FindNewPlace(Element element, (int Row, int Col) push_to)
+        private async Task FindNewPlaceAsync(Element element, (int Row, int Col) push_to)
         {
 #pragma warning disable BL0005 // Component parameter should not be set outside of its component.
-            var pseudo_element = new Element { Row = element.Row, Column = element.Column, RowSpan = element.ActualRowSpan, ColumnSpan = element.ActualColumnSpan };
+            var pseudo_element = new Element { ActualRow = element.ActualRow, ActualColumn = element.ActualColumn, RowSpan = element.ActualRowSpan, ColumnSpan = element.ActualColumnSpan };
 #pragma warning restore BL0005 // Component parameter should not be set outside of its component.
             // we try to move the element as little as possible. we therefore start searching around the original Row/Column and expand our "radius" from there.
             // we traverse the possible positions in the following way (* denotes original position):
@@ -185,10 +185,10 @@ namespace Excubo.Blazor.Grids
                     for (int i = 0; i < count; ++i)
                     {
                         // walk into the direction
-                        pseudo_element.Row += direction.Row;
-                        pseudo_element.Column += direction.Col;
+                        pseudo_element.ActualRow += direction.Row;
+                        pseudo_element.ActualColumn += direction.Col;
                         // see whether this is a legal position
-                        if (pseudo_element.Row < 0 || pseudo_element.Column < 0 || pseudo_element.Column + pseudo_element.ActualColumnSpan > column_definitions.Count)
+                        if (pseudo_element.ActualRow < 0 || pseudo_element.ActualColumn < 0 || pseudo_element.ActualColumn + pseudo_element.ActualColumnSpan >= column_definitions.Count)
                         {
                             continue;
                         }
@@ -196,7 +196,7 @@ namespace Excubo.Blazor.Grids
                         if (elements.Where(e => e != element).All(e => !pseudo_element.OverlapsWith(e)))
                         {
                             // we found a good new place! let's move the actual element and quit.
-                            element.MoveTo(pseudo_element.Row, pseudo_element.Column);
+                            await element.MoveToAsync(pseudo_element.ActualRow, pseudo_element.ActualColumn);
                             return;
                         }
                     }
@@ -204,7 +204,7 @@ namespace Excubo.Blazor.Grids
                 }
             }
             // fallback:
-            element.MoveDown();
+            await element.MoveDownAsync();
         }
 
         private readonly List<Element> render_elements = new List<Element>();
@@ -217,17 +217,17 @@ namespace Excubo.Blazor.Grids
             render_elements.Add(element);
             element.render_required = true;
         }
-        protected override void OnAfterRender(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
                 foreach (var element in elements)
                 {
-                    ResolveOverlaps(element, (1, 0));
+                    await ResolveOverlapsAsync(element, (1, 0));
                 }
             }
             render_elements.Clear();
-            base.OnAfterRender(firstRender);
+            await base.OnAfterRenderAsync(firstRender);
         }
     }
 }

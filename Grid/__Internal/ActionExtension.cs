@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Excubo.Blazor.Grids.__Internal
 {
@@ -9,6 +10,13 @@ namespace Excubo.Blazor.Grids.__Internal
             if (condition)
             {
                 action.Invoke();
+            }
+        }
+        public static async Task If(this Func<Task> task, bool condition)
+        {
+            if (condition)
+            {
+                await task.Invoke();
             }
         }
     }

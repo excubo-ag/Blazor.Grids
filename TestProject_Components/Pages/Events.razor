@@ -4,11 +4,9 @@ In this demo, events are recorded on move and resize of elements.
 
 <Grid>
     <Columns Count="2" />
-    <Element style="height: 100%">
-        <Dashboard RowGap="1em" ColumnGap="1em" OnMove="Moved" OnResize="Resized">
+    <Element style="height: 100%; border: 1px solid black">
+        <Dashboard RowGap="1em" ColumnGap="1em" OnMove="Moved" OnResize="Resized" ColumnCount="4" ElementStyle="border: 1px dashed black">
             <TitleSettings HeadingLevel="4" Alignment="Alignment.Left" />
-            <Rows Count="4" />
-            <Columns Count="4" />
             <Element @bind-Column="@hello_element_def.Column" @bind-Row="@hello_element_def.Row" @bind-ColumnSpan="@hello_element_def.ColumnSpan" @bind-RowSpan="@hello_element_def.RowSpan" Title="@hello_element_def.Title" OnMove="HelloMoved" OnResize="HelloResized" @ref="hello_element">
                 <div>
                     <ul>
@@ -56,20 +54,20 @@ In this demo, events are recorded on move and resize of elements.
     private List<(string Action, int a, int b)> HelloEvents = new List<(string Action, int a, int b)>();
     private List<(string Action, string ElementTitle, int a, int b)> GridEvents = new List<(string Action, string ElementTitle, int a, int b)>();
     private Element hello_element;
-    private void Moved(Element element)
+    private void Moved(ElementMoveArgs args)
     {
-        GridEvents.Add(("moved", element.Title, element.Row, element.Column));
+        GridEvents.Add(("moved", args.Element.Title, args.NewRow, args.NewColumn));
     }
-    private void Resized(Element element)
+    private void Resized(ElementResizeArgs args)
     {
-        GridEvents.Add(("resized", element.Title, element.RowSpan, element.ColumnSpan));
+        GridEvents.Add(("resized", args.Element.Title, args.NewRowSpan, args.NewColumnSpan));
     }
-    private void HelloMoved()
+    private void HelloMoved(ElementMoveArgs args)
     {
-        HelloEvents.Add(("moved", hello_element.Row, hello_element.Column));
+        HelloEvents.Add(("moved", args.NewRow, args.NewColumn));
     }
-    private void HelloResized()
+    private void HelloResized(ElementResizeArgs args)
     {
-        HelloEvents.Add(("resized", hello_element.RowSpan, hello_element.ColumnSpan));
+        HelloEvents.Add(("resized", args.NewRowSpan, args.NewColumnSpan));
     }
 }

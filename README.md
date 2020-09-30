@@ -87,3 +87,28 @@ The API should feel like you're using Blazor, not a javascript library.
 
 The non-C# part of the code of the library should be as tiny as possible. We set ourselves a maximum amount of 10kB for combined js+css.
 The current payload is less than 1kB, and only gets loaded dynamically when the component is actually used.
+
+## Breaking changes
+
+### Version 2.X.Y
+
+Events were changed such that the callback parameter is not an `Element` anymore, but `ElementMoveArgs` or `ElementResizeArgs`. To upgrade your code, apply the changes like this:
+
+```diff
+-    private void OnMove(Element element)
+-    {
+-        GridEvents.Add(("moved", element.Title, element.Row, element.Column));
+-    }
++    private void OnMove(ElementMoveArgs args)
++    {
++        GridEvents.Add(("moved", args.Element.Title, args.NewRow, args.NewColumn));
++    }
+-    private void OnResize(Element element)
+-    {
+-        GridEvents.Add(("moved", element.Title, element.Row, element.Column));
+-    }
++    private void OnResize(ElementMoveArgs args)
++    {
++        GridEvents.Add(("moved", args.Element.Title, args.NewRow, args.NewColumn));
++    }
+```

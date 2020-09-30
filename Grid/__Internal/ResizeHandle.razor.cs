@@ -56,10 +56,10 @@ namespace Excubo.Blazor.Grids.__Internal
             }
             else
             {
-                Resize(e);
+                await ResizeImplAsync(e);
             }
         }
-        private void Resize(MouseEventArgs e)
+        private async Task ResizeImplAsync(MouseEventArgs e)
         {
             var overlay_x = element_dimension.Width + e.ClientX - start_position.Value.X;
             var overlay_y = element_dimension.Height + e.ClientY - start_position.Value.Y;
@@ -69,11 +69,11 @@ namespace Excubo.Blazor.Grids.__Internal
             var width_ratio = (overlay_x - element_dimension.Width) / column_width;
             var height_ratio = (overlay_y - element_dimension.Height) / row_height;
             var (height_increase, height_decrease, width_increase, width_decrease) = (width_ratio, height_ratio).GetRequiredChanges(stronger_threshold: 0.875, weaker_threshold: 0.333);
-            static Action Perform(Action action) => action;
-            Perform(Element.IncreaseHeight).If(height_increase);
-            Perform(Element.DecreaseHeight).If(height_decrease);
-            Perform(Element.IncreaseWidth).If(width_increase);
-            Perform(Element.DecreaseWidth).If(width_decrease);
+            static Func<Task> Perform(Func<Task> action) => action;
+            await Perform(Element.IncreaseHeightAsync).If(height_increase);
+            await Perform(Element.DecreaseHeightAsync).If(height_decrease);
+            await Perform(Element.IncreaseWidthAsync).If(width_increase);
+            await Perform(Element.DecreaseWidthAsync).If(width_decrease);
             if (width_decrease || width_increase || height_increase || height_decrease)
             {
                 start_position = null;

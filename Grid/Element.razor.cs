@@ -1,9 +1,34 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Excubo.Blazor.Grids
 {
+    public struct ElementMoveArgs
+    {
+        public ElementMoveArgs(Element element, int new_row, int new_column)
+        {
+            Element = element;
+            NewRow = new_row;
+            NewColumn = new_column;
+        }
+        public Element Element { get; }
+        public int NewRow { get; }
+        public int NewColumn { get; }
+    }
+    public struct ElementResizeArgs
+    {
+        public ElementResizeArgs(Element element, int new_row_span, int new_column_span)
+        {
+            Element = element;
+            NewRowSpan = new_row_span;
+            NewColumnSpan = new_column_span;
+        }
+        public Element Element { get; }
+        public int NewRowSpan { get; }
+        public int NewColumnSpan { get; }
+    }
     public partial class Element
     {
         [CascadingParameter] public Grid Grid { get; set; }
@@ -16,25 +41,27 @@ namespace Excubo.Blazor.Grids
         /// The column that this element should be in. In case the element spans multiple columns, this value indicates the column which contains the top left corner of the element.
         /// </summary>
         [Parameter] public int Column { get; set; }
+        internal int ActualColumn { get; set; }
         [Parameter] public EventCallback<int> ColumnChanged { get; set; }
         /// <summary>
         /// The row that this element should be in. In case the element spans multiple rows, this value indicates the row which contains the top left corner of the element.
         /// </summary>
         [Parameter] public int Row { get; set; }
+        internal int ActualRow { get; set; }
         [Parameter] public EventCallback<int> RowChanged { get; set; }
         /// <summary>
         /// The number of columns that this element should span.
         /// Any value less than 1 is interpreted as 1.
         /// </summary>
         [Parameter] public int ColumnSpan { get; set; }
-        internal int ActualColumnSpan => Math.Max(1, ColumnSpan);
+        internal int ActualColumnSpan { get; set; }
         [Parameter] public EventCallback<int> ColumnSpanChanged { get; set; }
         /// <summary>
         /// The number of rows that this element should span.
         /// Any value less than 1 is interpreted as 1.
         /// </summary>
         [Parameter] public int RowSpan { get; set; }
-        internal int ActualRowSpan => Math.Max(1, RowSpan);
+        internal int ActualRowSpan { get; set; }
         [Parameter] public EventCallback<int> RowSpanChanged { get; set; }
         /// <summary>
         /// The title that should appear at the top of the element
@@ -43,11 +70,11 @@ namespace Excubo.Blazor.Grids
         /// <summary>
         /// Callback for when the element was moved.
         /// </summary>
-        [Parameter] public Action OnMove { get; set; }
+        [Parameter] public Action<ElementMoveArgs> OnMove { get; set; }
         /// <summary>
         /// Callback for when the element was resized.
         /// </summary>
-        [Parameter] public Action OnResize { get; set; }
+        [Parameter] public Action<ElementResizeArgs> OnResize { get; set; }
         /// <summary>
         /// The style of the header. Only visible if a Title is present. Defaults to a thin, dark line at the bottom of the header.
         /// </summary>
@@ -64,7 +91,7 @@ namespace Excubo.Blazor.Grids
         /// </summary>
         /// <param name="height"></param>
         /// <param name="width"></param>
-        public void Resize(int height, int width)
+        public async Task ResizeAsync(int height, int width)
         {
             if (height <= 0)
             {
@@ -76,16 +103,14 @@ namespace Excubo.Blazor.Grids
             }
             var higher = height > ActualRowSpan;
             var wider = width > ActualColumnSpan;
-            RowSpan = height;
-            ColumnSpan = width;
+            await UpdateRowSpanAsync(height);
+            await UpdateColumnSpanAsync(width);
             if (higher || wider)
             {
                 var push_direction = higher ? (1, 0) : (0, 1); // push elements downwards or rightwards
-                Grid.ResolveOverlaps(this, push_to: push_direction);
+                await Grid.ResolveOverlapsAsync(this, push_to: push_direction);
             }
             Grid.RenderNothingBut(this);
-            _ = RowSpanChanged.InvokeAsync(RowSpan);
-            _ = ColumnSpanChanged.InvokeAsync(ColumnSpan);
             InvokeResizeEvents();
         }
         /// <summary>
@@ -93,7 +118,7 @@ namespace Excubo.Blazor.Grids
         /// </summary>
         /// <param name="row"></param>
         /// <param name="column"></param>
-        public void MoveTo(int row, int column)
+        public async Task MoveToAsync(int row, int column)
         {
             if (row < 0)
             {
@@ -103,17 +128,79 @@ namespace Excubo.Blazor.Grids
             {
                 throw new ArgumentException("Column of an element may not be negative", nameof(column));
             }
-            Row = row;
-            Column = column;
-            Grid.ResolveOverlaps(this, (-1, 0));
+            await UpdateRowAsync(row);
+            await UpdateColumnAsync(column);
+            await Grid.ResolveOverlapsAsync(this, (-1, 0));
             Grid.RenderNothingBut(this);
-            _ = RowChanged.InvokeAsync(Row);
-            _ = ColumnChanged.InvokeAsync(Column);
             InvokeMoveEvents();
         }
         #endregion
-        private int actual_column_span => ColumnSpan < 2 ? 1 : ColumnSpan;
-        private int actual_row_span => RowSpan < 2 ? 1 : RowSpan;
+        private async Task UpdateRowAsync(int value)
+        {
+            if (ActualRow == value)
+            {
+                return;
+            }
+            ActualRow = value;
+            if (RowChanged.HasDelegate)
+            {
+                await RowChanged.InvokeAsync(value);
+            }
+            else
+            {
+                Row = value;
+            }
+        }
+        private async Task UpdateColumnAsync(int value)
+        {
+            if (ActualColumn == value)
+            {
+                return;
+            }
+            ActualColumn = value;
+            if (ColumnChanged.HasDelegate)
+            {
+                await ColumnChanged.InvokeAsync(value);
+            }
+            else
+            {
+                Column = value;
+            }
+        }
+        private async Task UpdateRowSpanAsync(int value)
+        {
+            value = Math.Max(1, value);
+            if (ActualRowSpan == value)
+            {
+                return;
+            }
+            ActualRowSpan = value;
+            if (RowSpanChanged.HasDelegate)
+            {
+                await RowSpanChanged.InvokeAsync(value);
+            }
+            else
+            {
+                RowSpan = value;
+            }
+        }
+        private async Task UpdateColumnSpanAsync(int value)
+        {
+            value = Math.Max(1, value);
+            if (ActualColumnSpan == value)
+            {
+                return;
+            }
+            ActualColumnSpan = value;
+            if (ColumnSpanChanged.HasDelegate)
+            {
+                await ColumnSpanChanged.InvokeAsync(value);
+            }
+            else
+            {
+                ColumnSpan = value;
+            }
+        }
         private string area => string.IsNullOrEmpty(Area) ? null : $"grid-area: {Area};";
         private string column
         {
@@ -123,21 +210,21 @@ namespace Excubo.Blazor.Grids
                 {
                     return null;
                 }
-                if (Column == 0)
+                if (ActualColumn == 0)
                 {
-                    if (ColumnSpan < 2)
+                    if (ActualColumnSpan < 2)
                     {
                         return "grid-column: 1;";
                     }
-                    return $"grid-column: 1 / span {ColumnSpan};";
+                    return $"grid-column: 1 / span {ActualColumnSpan};";
                 }
                 else
                 {
-                    if (ColumnSpan < 2)
+                    if (ActualColumnSpan < 2)
                     {
-                        return $"grid-column: {Column + 1};";
+                        return $"grid-column: {ActualColumn + 1};";
                     }
-                    return $"grid-column: {Column + 1} / span {ColumnSpan};";
+                    return $"grid-column: {ActualColumn + 1} / span {ActualColumnSpan};";
                 }
             }
         }
@@ -149,21 +236,21 @@ namespace Excubo.Blazor.Grids
                 {
                     return null;
                 }
-                if (Row == 0)
+                if (ActualRow == 0)
                 {
-                    if (RowSpan < 2)
+                    if (ActualRowSpan < 2)
                     {
                         return "grid-row: 1;";
                     }
-                    return $"grid-row: 1 / span {RowSpan};";
+                    return $"grid-row: 1 / span {ActualRowSpan};";
                 }
                 else
                 {
-                    if (RowSpan < 2)
+                    if (ActualRowSpan < 2)
                     {
-                        return $"grid-row: {Row + 1};";
+                        return $"grid-row: {ActualRow + 1};";
                     }
-                    return $"grid-row: {Row + 1} / span {RowSpan};";
+                    return $"grid-row: {ActualRow + 1} / span {ActualRowSpan};";
                 }
             }
         }
@@ -172,6 +259,10 @@ namespace Excubo.Blazor.Grids
             System.Diagnostics.Debug.Assert(Grid != null);
             Grid.Add(this);
             base.OnParametersSet();
+            ActualRow = Row;
+            ActualColumn = Column;
+            ActualRowSpan = Math.Max(1, RowSpan);
+            ActualColumnSpan = Math.Max(1, ColumnSpan);
         }
         internal bool render_required { get; set; } = true;
         protected override bool ShouldRender()
@@ -185,84 +276,78 @@ namespace Excubo.Blazor.Grids
         }
         private void InvokeMoveEvents()
         {
-            OnMove?.Invoke();
-            Grid.OnMove?.Invoke(this);
+            var event_args = new ElementMoveArgs(this, ActualRow, ActualColumn);
+            OnMove?.Invoke(event_args);
+            Grid.OnMove?.Invoke(event_args);
         }
         private void InvokeResizeEvents()
         {
-            OnResize?.Invoke();
-            Grid.OnResize?.Invoke(this);
+            var event_args = new ElementResizeArgs(this, ActualRowSpan, ActualColumnSpan);
+            OnResize?.Invoke(event_args);
+            Grid.OnResize?.Invoke(event_args);
         }
-        internal void MoveRight()
+        internal async Task MoveRightAsync()
         {
-            Column += 1;
-            Grid.ResolveOverlaps(this, (0, -1));
+            await UpdateColumnAsync(ActualColumn + 1);
+            await Grid.ResolveOverlapsAsync(this, (0, -1));
             Grid.RenderNothingBut(this);
             InvokeMoveEvents();
-            _ = ColumnChanged.InvokeAsync(Column);
         }
-        internal void MoveLeft()
+        internal async Task MoveLeftAsync()
         {
-            Column -= 1;
-            Grid.ResolveOverlaps(this, (0, 1));
+            await UpdateColumnAsync(ActualColumn - 1);
+            await Grid.ResolveOverlapsAsync(this, (0, 1));
             Grid.RenderNothingBut(this);
             InvokeMoveEvents();
-            _ = ColumnChanged.InvokeAsync(Column);
         }
-        internal void MoveUp()
+        internal async Task MoveUpAsync()
         {
-            Row -= 1;
-            Grid.ResolveOverlaps(this, (1, 0));
+            await UpdateRowAsync(ActualRow - 1);
+            await Grid.ResolveOverlapsAsync(this, (1, 0));
             Grid.RenderNothingBut(this);
             InvokeMoveEvents();
-            _ = RowChanged.InvokeAsync(Row);
         }
-        internal void MoveDown()
+        internal async Task MoveDownAsync()
         {
-            Row += 1;
-            Grid.ResolveOverlaps(this, (-1, 0));
+            await UpdateRowAsync(ActualRow + 1);
+            await Grid.ResolveOverlapsAsync(this, (-1, 0));
             Grid.RenderNothingBut(this);
             InvokeMoveEvents();
-            _ = RowChanged.InvokeAsync(Row);
         }
-        internal void IncreaseWidth()
+        internal async Task IncreaseWidthAsync()
         {
-            ColumnSpan = ColumnSpan < 2 ? 2 : ColumnSpan + 1;
-            Grid.ResolveOverlaps(this, (0, 1));
+            await UpdateColumnSpanAsync(ActualColumnSpan + 1);
+            await Grid.ResolveOverlapsAsync(this, (0, 1));
             Grid.RenderNothingBut(this);
             InvokeResizeEvents();
-            _ = ColumnSpanChanged.InvokeAsync(ColumnSpan);
         }
-        internal void IncreaseHeight()
+        internal async Task IncreaseHeightAsync()
         {
-            RowSpan = RowSpan < 2 ? 2 : RowSpan + 1;
-            Grid.ResolveOverlaps(this, (1, 0));
+            await UpdateRowSpanAsync(ActualRowSpan + 1);
+            await Grid.ResolveOverlapsAsync(this, (1, 0));
             Grid.RenderNothingBut(this);
             InvokeResizeEvents();
-            _ = RowSpanChanged.InvokeAsync(RowSpan);
         }
-        internal void DecreaseWidth()
+        internal async Task DecreaseWidthAsync()
         {
-            ColumnSpan -= 1;
+            await UpdateColumnSpanAsync(ActualColumnSpan - 1);
             Grid.RenderNothingBut(this);
             InvokeResizeEvents();
-            _ = ColumnSpanChanged.InvokeAsync(ColumnSpan);
         }
-        internal void DecreaseHeight()
+        internal async Task DecreaseHeightAsync()
         {
-            RowSpan -= 1;
+            await UpdateRowSpanAsync(ActualRowSpan - 1);
             Grid.RenderNothingBut(this);
             InvokeResizeEvents();
-            _ = RowSpanChanged.InvokeAsync(RowSpan);
         }
         internal bool OverlapsWith(Element other)
         {
             // two elements overlap if the not not overlap, duh
             // two elements do not overlap if one element is further to the left, top, right, or bottom than the other.
-            return !(other.Row + other.ActualRowSpan <= Row
-                  || other.Column + other.ActualColumnSpan <= Column
-                  || other.Row >= Row + ActualRowSpan
-                  || other.Column >= Column + ActualColumnSpan);
+            return !(other.ActualRow + other.ActualRowSpan <= ActualRow
+                  || other.ActualColumn + other.ActualColumnSpan <= ActualColumn
+                  || other.ActualRow >= ActualRow + ActualRowSpan
+                  || other.ActualColumn >= ActualColumn + ActualColumnSpan);
         }
     }
 }

@@ -74,11 +74,11 @@ namespace Excubo.Blazor.Grids.__Internal
                 var width_ratio = (e.ClientX - start_position.Value.X) / column_width;
                 var height_ratio = (e.ClientY - start_position.Value.Y) / row_height;
                 var (move_down, move_up, move_right, move_left) = (width_ratio, height_ratio).GetRequiredChanges(stronger_threshold: 0.9, weaker_threshold: 0.5);
-                static Action Perform(Action action) => action;
-                Perform(Element.MoveDown).If(move_down);
-                Perform(Element.MoveUp).If(move_up);
-                Perform(Element.MoveRight).If(move_right);
-                Perform(Element.MoveLeft).If(move_left);
+                static Func<Task> PerformAsync(Func<Task> action) => action;
+                await PerformAsync(Element.MoveDownAsync).If(move_down);
+                await PerformAsync(Element.MoveUpAsync).If(move_up);
+                await PerformAsync(Element.MoveRightAsync).If(move_right);
+                await PerformAsync(Element.MoveLeftAsync).If(move_left);
                 if (move_up || move_down || move_right || move_left)
                 {
                     start_position = null;

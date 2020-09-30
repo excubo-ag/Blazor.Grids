@@ -3,8 +3,7 @@
 In this demo, all elements are <a href="movable_elements">movable</a> and <a href="resizable_elements">resizable</a>, and we also prevent any two elements from overlapping.
 Important: This feature only works if an <a href="aspect_ratio">AspectRatio</a> is set.
 
-<Grid AspectRatio="1.5" AllowMove="true" AllowResize="true" PreventOverlaps="true" style="height: 100%">
-    <Rows Count="10" Height="1fr" />
+<Grid AspectRatio="1.5" AllowMove="true" AllowResize="true" PreventOverlaps="true" AutoRows="true" style="height: 100%">
     <Columns Count="4" Width="1fr" />
     @foreach (var element in elements)
     {
