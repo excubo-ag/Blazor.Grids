@@ -1,7 +1,7 @@
 name: .NET Core deploy to GitHub pages
 
 env:
-  dotnet_version: 3.1.x
+  dotnet_version: 5.0.100-rc.2.20479.15
   project_name: "TestProject_ClientSide/TestProject_ClientSide.csproj"
   base_href: /Blazor.Grids/
   target_framework: netstandard2.1
