@@ -4,10 +4,10 @@
 <CascadingValue Value="this" IsFixed="true">
     @if (Grid.AspectRatio == null)
     {
-    <div class="eg-elc @Grid.ElementClass @additional_class" style="@Grid.ElementStyle; @additional_style; @area @column @row " @attributes='AdditionalAttributes?.Where(kv => kv.Key != "style" && kv.Key != "class")'>
-        <Header Title="@Title" />
-        @ChildContent
-    </div>
+        <div class="eg-elc @Grid.ElementClass @additional_class" style="@Grid.ElementStyle; @additional_style; @area @column @row " @attributes='AdditionalAttributes?.Where(kv => kv.Key != "style" && kv.Key != "class")'>
+            <Header Title="@Title" />
+            @ChildContent
+        </div>
     }
     else
     {

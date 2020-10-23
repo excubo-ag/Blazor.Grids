@@ -7,7 +7,7 @@ This dashboard has four columns.
 <Dashboard AspectRatio="1.5" style="height: 100%" ColumnCount="4">
     @foreach (var element in elements)
     {
-        <Element @bind-Row="element.Row" @bind-Column="element.Column" @bind-RowSpan="element.RowSpan" @bind-ColumnSpan="element.ColumnSpan"
+        <Element @key="element" @bind-Row="element.Row" @bind-Column="element.Column" @bind-RowSpan="element.RowSpan" @bind-ColumnSpan="element.ColumnSpan"
                  Title="@element.Color"
                  style="border: none; box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0,0,0,.12)">
             @*The style above gives the element material style*@

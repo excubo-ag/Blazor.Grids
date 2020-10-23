@@ -26,17 +26,17 @@ Excubo.Blazor.Grids is distributed [via nuget.org](https://www.nuget.org/package
 
 #### Package Manager:
 ```ps
-Install-Package Excubo.Blazor.Grids -Version 1.5.2
+Install-Package Excubo.Blazor.Grids
 ```
 
 #### .NET Cli:
 ```cmd
-dotnet add package Excubo.Blazor.Grids --version 1.5.2
+dotnet add package Excubo.Blazor.Grids
 ```
 
 #### Package Reference
 ```xml
-<PackageReference Include="Excubo.Blazor.Grids" Version="1.5.2" />
+<PackageReference Include="Excubo.Blazor.Grids" />
 ```
 
 ### 2. Add the `Grid` (or a `Dashboard`) component to your app

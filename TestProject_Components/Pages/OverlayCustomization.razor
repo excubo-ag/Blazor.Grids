@@ -8,7 +8,7 @@ The branding of your app might require different colors. In this demo, we modify
     <Columns Count="4" Width="1fr" />
     @foreach (var element in elements)
     {
-        <Element @bind-Row="element.Row" @bind-Column="element.Column" @bind-RowSpan="element.RowSpan" @bind-ColumnSpan="element.ColumnSpan" Title="@element.Color">
+        <Element @key="element" @bind-Row="element.Row" @bind-Column="element.Column" @bind-RowSpan="element.RowSpan" @bind-ColumnSpan="element.ColumnSpan" Title="@element.Color">
             <div style="height: 100%; width: 100%; background-color: @(element.Color)"></div>
         </Element>
     }
