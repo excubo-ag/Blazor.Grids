@@ -12,14 +12,14 @@ In this demo, events are recorded on move and resize of elements.
                     <ul>
                         @foreach (var e in HelloEvents)
                         {
-                            <li @key="e">@e.Action this element to @e.a, @e.b</li>
+                            <li @key="@e.index">@e.Action this element to @e.a, @e.b</li>
                         }
                     </ul>
                 </div>
             </Element>
             @foreach (var el in elements)
             {
-                <Element @key="el" @bind-Column="@el.Column" @bind-Row="@el.Row" @bind-ColumnSpan="@el.ColumnSpan" @bind-RowSpan="@el.RowSpan" Title="@el.Title"></Element>
+                <Element @key="@el" @bind-Column="@el.Column" @bind-Row="@el.Row" @bind-ColumnSpan="@el.ColumnSpan" @bind-RowSpan="@el.RowSpan" Title="@el.Title"></Element>
             }
         </Dashboard>
     </Element>
@@ -27,7 +27,7 @@ In this demo, events are recorded on move and resize of elements.
         <ul>
             @foreach (var e in GridEvents)
             {
-                <li @key="e">@e.Action @e.ElementTitle to @e.a, @e.b</li>
+                <li @key="@e.index">@e.Action @e.ElementTitle to @e.a, @e.b</li>
             }
         </ul>
     </Element>
@@ -51,23 +51,23 @@ In this demo, events are recorded on move and resize of elements.
         new ElementDefinition { Title = "Other", Row = 1, ColumnSpan = 2 },
         new ElementDefinition { Title = "world", Column = 1 }
     };
-    private List<(string Action, int a, int b)> HelloEvents = new List<(string Action, int a, int b)>();
-    private List<(string Action, string ElementTitle, int a, int b)> GridEvents = new List<(string Action, string ElementTitle, int a, int b)>();
+    private List<(string Action, int a, int b, int index)> HelloEvents = new List<(string Action, int a, int b, int index)>();
+    private List<(string Action, string ElementTitle, int a, int b, int index)> GridEvents = new List<(string Action, string ElementTitle, int a, int b, int index)>();
     private Element hello_element;
     private void Moved(ElementMoveArgs args)
     {
-        GridEvents.Add(("moved", args.Element.Title, args.NewRow, args.NewColumn));
+        GridEvents.Add(("moved", args.Element.Title, args.NewRow, args.NewColumn, GridEvents.Count));
     }
     private void Resized(ElementResizeArgs args)
     {
-        GridEvents.Add(("resized", args.Element.Title, args.NewRowSpan, args.NewColumnSpan));
+        GridEvents.Add(("resized", args.Element.Title, args.NewRowSpan, args.NewColumnSpan, GridEvents.Count));
     }
     private void HelloMoved(ElementMoveArgs args)
     {
-        HelloEvents.Add(("moved", args.NewRow, args.NewColumn));
+        HelloEvents.Add(("moved", args.NewRow, args.NewColumn, HelloEvents.Count));
     }
     private void HelloResized(ElementResizeArgs args)
     {
-        HelloEvents.Add(("resized", args.NewRowSpan, args.NewColumnSpan));
+        HelloEvents.Add(("resized", args.NewRowSpan, args.NewColumnSpan, HelloEvents.Count));
     }
 }
