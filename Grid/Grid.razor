@@ -1,6 +1,6 @@
 ﻿@using Excubo.Blazor.Grids.__Internal
 @using System.Globalization 
-<Excubo.Blazor.LazyStyleSheet.Stylesheet Src="_content/Excubo.Blazor.Grids/style.min.css" />
+<Stylesheet Src="_content/Excubo.Blazor.Grids/style.min.css" />
 <div style="display: grid;
             position: relative;
             @(column_definitions.Any() ? ("grid-template-columns: " + string.Join(" ", column_definitions.Select(d => d.Width))): "");
