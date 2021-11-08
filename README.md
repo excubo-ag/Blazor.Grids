@@ -90,6 +90,10 @@ The current payload is less than 1kB, and only gets loaded dynamically when the 
 
 ## Breaking changes
 
+### Version 3.X.Y
+
+Targets net6.0 exclusively from now on.
+
 ### Version 2.X.Y
 
 Events were changed such that the callback parameter is not an `Element` anymore, but `ElementMoveArgs` or `ElementResizeArgs`. To upgrade your code, apply the changes like this:
