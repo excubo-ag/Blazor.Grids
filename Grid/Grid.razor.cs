@@ -32,17 +32,46 @@ namespace Excubo.Blazor.Grids
         /// An aspect ratio of 0.5 result in tiles that are twice as high as wide.
         /// </summary>
         [Parameter] public double? AspectRatio { get; set; }
+
+        private bool allowResize = false;
+
         /// <summary>
         /// Whether to allow resizing elements or not. Default is false.
         /// Note that this feature is only supported when an AspectRatio is set, otherwise this flag has no effect.
         /// </summary>
-        [Parameter] public bool AllowResize { get; set; }
+        [Parameter] public bool AllowResize 
+        {
+            get { return allowResize; }
+            set
+            {
+                if(allowResize != value)
+                {
+                    allowResize = value;
+                    StateHasChanged();
+                }
+            }
+        }
+
+        private bool allowMove = false;
+
         /// <summary>
         /// Whether to allow moving elements or not. Default is false.
         /// Note that this feature is only supported when an AspectRatio is set, otherwise this flag has no effect.
         /// Important: elements are movable by dragging the title bar. Hence, without setting a title for your element, your element won't have a title bar and you won't be able to move them.
         /// </summary>
-        [Parameter] public bool AllowMove { get; set; }
+        [Parameter] public bool AllowMove
+        {
+            get { return allowMove; }
+            set
+            {
+                if (allowMove != value)
+                {
+                    allowMove = value;
+                    StateHasChanged();
+                }
+            }
+        }
+
         /// <summary>
         /// The gap between rows.
         /// </summary>
