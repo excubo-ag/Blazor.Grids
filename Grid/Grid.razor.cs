@@ -22,6 +22,15 @@ namespace Excubo.Blazor.Grids
         /// </summary>
         [Parameter] public RenderFragment ChildContent { get; set; }
         /// <summary>
+        /// Allows you to override the default header and render your own content.
+        /// </summary>
+        /// <remarks>
+        /// If you override the header the header level and alignment attributes will have no effect.
+        /// 
+        /// The context is the Title you have set on this element.
+        /// </remarks>
+        [Parameter] public RenderFragment<string> Header { get; set; }
+        /// <summary>
         /// Optional aspect ratio of grid tiles
         /// <br/>
         /// AspectRatio = Width/Height

@@ -4,13 +4,27 @@
 }
 @if (Element.Grid.AllowMove)
 {
-    <div @onmousemove="MovingAsync" @onmousedown="MouseDownAsync" @onmouseup="MouseUpAsync" style="cursor: move; @Element.HeaderStyle">
-        <Heading Text="@Title" HeadingLevel="Element.Grid.TitleSettings.HeadingLevel" Alignment="Element.Grid.TitleSettings.Alignment" />
+    <div @onmousemove="MovingAsync" @onmousedown="MouseDownAsync" @onmouseup="MouseUpAsync" class="@Element.HeaderClass" style="cursor: move; @Element.HeaderStyle">
+        @if(ChildContent != null)
+        {
+            @ChildContent(Title)
+        }
+        else
+        {
+            <Heading Text="@Title" HeadingLevel="Element.Grid.TitleSettings.HeadingLevel" Alignment="Element.Grid.TitleSettings.Alignment" />            
+        }        
     </div>
 }
 else
 {
-    <div style="@Element.HeaderStyle">
-        <Heading Text="@Title" HeadingLevel="Element.Grid.TitleSettings.HeadingLevel" Alignment="Element.Grid.TitleSettings.Alignment" />
+    <div class="@Element.HeaderClass" style="@Element.HeaderStyle">
+        @if (ChildContent != null)
+        {
+            @ChildContent(Title)
+        }
+        else
+        {
+            <Heading Text="@Title" HeadingLevel="Element.Grid.TitleSettings.HeadingLevel" Alignment="Element.Grid.TitleSettings.Alignment" />
+        }
     </div>
 }
