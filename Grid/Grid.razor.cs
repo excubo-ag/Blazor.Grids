@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Components;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
 
 namespace Excubo.Blazor.Grids
 {
@@ -165,7 +165,7 @@ namespace Excubo.Blazor.Grids
         private async Task FindNewPlaceAsync(Element element, (int Row, int Col) push_to)
         {
 #pragma warning disable BL0005 // Component parameter should not be set outside of its component.
-            var pseudo_element = new Element { ActualRow = element.ActualRow, ActualColumn = element.ActualColumn, RowSpan = element.ActualRowSpan, ColumnSpan = element.ActualColumnSpan };
+            var pseudo_element = new Element { ActualRow = element.ActualRow, ActualColumn = element.ActualColumn, ActualRowSpan = element.ActualRowSpan, ActualColumnSpan = element.ActualColumnSpan };
 #pragma warning restore BL0005 // Component parameter should not be set outside of its component.
             // we try to move the element as little as possible. we therefore start searching around the original Row/Column and expand our "radius" from there.
             // we traverse the possible positions in the following way (* denotes original position):
