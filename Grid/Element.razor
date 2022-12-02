@@ -20,7 +20,10 @@
                     @ChildContent
                 </div>
             </div>
-            <ResizeHandle />
+            @if(Grid.AllowResize)
+            {
+                <ResizeHandle />
+            }            
         </div>
     }
 </CascadingValue>
