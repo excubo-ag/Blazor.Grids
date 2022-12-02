@@ -1,53 +1,90 @@
 ﻿@page "/headers"
 <SourceCodeLink Repository="Blazor.Grids" Page="@(nameof(Titles))" />
 
-In this demo, the titles of elements are styled using the TitleSettings.
+In this demo, you can customize te header of an item with your own HTML and components. Take care to preserve an area for the user to click drag the element when allow move is enabled.
 
 @if(EditMode)
 {
     <div style="background-color: lightcoral; padding: 10px; margin-bottom:30px;">You are in Edit Mode, drag items to arrange them. <button style="float:right" @onclick="DoClick">Exit Edit</button></div>
 }
 
-<Grid RowGap="1em" ColumnGap="1em" AllowMove="EditMode" AllowResize="EditMode">
+<Grid ElementStyle="@(EditMode ? "border-width: thin;border-color: black; border-style: dashed;":"")" AspectRatio="1.5" RowGap="1em" ColumnGap="1em" AllowMove="EditMode" AllowResize="EditMode">
     <Header>
         <svg class="svg-icon" viewBox="0 0 20 20" width="32px" height="32px">
             <path d="M17.684,7.925l-5.131-0.67L10.329,2.57c-0.131-0.275-0.527-0.275-0.658,0L7.447,7.255l-5.131,0.67C2.014,7.964,1.892,8.333,2.113,8.54l3.76,3.568L4.924,17.21c-0.056,0.297,0.261,0.525,0.533,0.379L10,15.109l4.543,2.479c0.273,0.153,0.587-0.089,0.533-0.379l-0.949-5.103l3.76-3.568C18.108,8.333,17.986,7.964,17.684,7.925 M13.481,11.723c-0.089,0.083-0.129,0.205-0.105,0.324l0.848,4.547l-4.047-2.208c-0.055-0.03-0.116-0.045-0.176-0.045s-0.122,0.015-0.176,0.045l-4.047,2.208l0.847-4.547c0.023-0.119-0.016-0.241-0.105-0.324L3.162,8.54L7.74,7.941c0.124-0.016,0.229-0.093,0.282-0.203L10,3.568l1.978,4.17c0.053,0.11,0.158,0.187,0.282,0.203l4.578,0.598L13.481,11.723z"></path>
         </svg>
         @context
-        @if(!EditMode)
-        {
-            <button style="float:right" @onclick="DoClick">Click To Edit</button>            
-        }        
     </Header>
     <ChildContent>
         <TitleSettings HeadingLevel="4" Alignment="Alignment.Left" />
         <Rows Count="4" />
         <Columns Count="4" />
-        <Element Column="0" Row="0" Title="Hello">
-           Its great to see you here.
-        </Element>
-        <Element Column="0" Row="1" Title="World">
-            This grid is usable around the world.
-        </Element>
-        <Element Column="0" Row="2" Title="Welcome">
+        <Element @key="@elements[0]" @bind-Row="elements[0].Row" @bind-Column="elements[0].Column" @bind-RowSpan="elements[2].RowSpan" @bind-ColumnSpan="elements[0].ColumnSpan" Title="Welcome">
             We would like to thank everyone for being here, and congratulate them for sticking around for a long title
         </Element>
-        <Element Column="1" Row="0" Title="A long long time ago, a title well remembered, ...">
+        <Element @key="@elements[1]" @bind-Row="elements[1].Row" @bind-Column="elements[1].Column" @bind-RowSpan="elements[1].RowSpan" @bind-ColumnSpan="elements[1].ColumnSpan" Title="Icons in Header">
+          You can use a custom header to insert a custom icon of your choice. The icon might represent the content of the grid cell.
+        </Element>
+        <Element @key="@elements[2]" @bind-Row="elements[2].Row" @bind-Column="elements[2].Column" @bind-RowSpan="elements[2].RowSpan" @bind-ColumnSpan="elements[2].ColumnSpan" Title="Buttons in Headers">
             <Header>
                 <svg class="svg-icon" viewBox="0 0 20 20" width="32px" height="32px">
-                    <path d="M18.121,9.88l-7.832-7.836c-0.155-0.158-0.428-0.155-0.584,0L1.842,9.913c-0.262,0.263-0.073,0.705,0.292,0.705h2.069v7.042c0,0.227,0.187,0.414,0.414,0.414h3.725c0.228,0,0.414-0.188,0.414-0.414v-3.313h2.483v3.313c0,0.227,0.187,0.414,0.413,0.414h3.726c0.229,0,0.414-0.188,0.414-0.414v-7.042h2.068h0.004C18.331,10.617,18.389,10.146,18.121,9.88 M14.963,17.245h-2.896v-3.313c0-0.229-0.186-0.415-0.414-0.415H8.342c-0.228,0-0.414,0.187-0.414,0.415v3.313H5.032v-6.628h9.931V17.245z M3.133,9.79l6.864-6.868l6.867,6.868H3.133z"></path>
+                    <path d="M17.684,7.925l-5.131-0.67L10.329,2.57c-0.131-0.275-0.527-0.275-0.658,0L7.447,7.255l-5.131,0.67C2.014,7.964,1.892,8.333,2.113,8.54l3.76,3.568L4.924,17.21c-0.056,0.297,0.261,0.525,0.533,0.379L10,15.109l4.543,2.479c0.273,0.153,0.587-0.089,0.533-0.379l-0.949-5.103l3.76-3.568C18.108,8.333,17.986,7.964,17.684,7.925 M13.481,11.723c-0.089,0.083-0.129,0.205-0.105,0.324l0.848,4.547l-4.047-2.208c-0.055-0.03-0.116-0.045-0.176-0.045s-0.122,0.015-0.176,0.045l-4.047,2.208l0.847-4.547c0.023-0.119-0.016-0.241-0.105-0.324L3.162,8.54L7.74,7.941c0.124-0.016,0.229-0.093,0.282-0.203L10,3.568l1.978,4.17c0.053,0.11,0.158,0.187,0.282,0.203l4.578,0.598L13.481,11.723z"></path>
                 </svg>
+                @context
+                @if (!EditMode)
+                {
+                    <button style="float:right" @onclick="DoClick">Click To Edit</button>
+                }
+                else
+                {
+                    <button style="float:right;" @onclick="DoClick" @onmousedown:stopPropagation="true" @onmouseup:stopPropagation="true">Exit Edit</button>
+                }
             </Header>
             <ChildContent>
-                This is my home.
+                <p>Place custom buttons within the header to open specific settings related to that element.</p>
+                <p>When placing a button within the header ensure you add  <strong>"@@onmousedown:stopPropagation=true @@onmouseup:stopPropagation="true"</strong> if you intend to allow move and resize. This ensures the button click is not interpreted as a move.</p>
+                <p><strong>&lt;button style=&quot;float:right;&quot; @@onclick=&quot;DoClick&quot; @@onmousedown:stopPropagation=&quot;true&quot; @@onmouseup:stopPropagation=&quot;true&quot;&gt;Exit Edit&lt;/button&gt;</strong></p>
             </ChildContent>
         </Element>
-    </ChildContent>
 
+        @if (!elements[3].Hidden)
+        {
+            <Element @key="@elements[3]" @bind-Row="elements[3].Row" @bind-Column="elements[3].Column" @bind-RowSpan="elements[3].RowSpan" @bind-ColumnSpan="elements[3].ColumnSpan" Title="A long long time ago, a title well remembered, ...">
+                <Header>
+                    <svg class="svg-icon" viewBox="0 0 20 20" width="32px" height="32px">
+                        <path d="M18.121,9.88l-7.832-7.836c-0.155-0.158-0.428-0.155-0.584,0L1.842,9.913c-0.262,0.263-0.073,0.705,0.292,0.705h2.069v7.042c0,0.227,0.187,0.414,0.414,0.414h3.725c0.228,0,0.414-0.188,0.414-0.414v-3.313h2.483v3.313c0,0.227,0.187,0.414,0.413,0.414h3.726c0.229,0,0.414-0.188,0.414-0.414v-7.042h2.068h0.004C18.331,10.617,18.389,10.146,18.121,9.88 M14.963,17.245h-2.896v-3.313c0-0.229-0.186-0.415-0.414-0.415H8.342c-0.228,0-0.414,0.187-0.414,0.415v3.313H5.032v-6.628h9.931V17.245z M3.133,9.79l6.864-6.868l6.867,6.868H3.133z"></path>
+                    </svg>
+                    @if (EditMode)
+                    {
+                        <button style="float:right;" @onclick="()=> elements[3].Hidden = true" @onmousedown:stopPropagation="true" @onmouseup:stopPropagation="true">Hide</button>                        
+                    }                    
+                </Header>
+                <ChildContent>
+                    This is my home.
+                </ChildContent>
+            </Element>  
+        }
+    </ChildContent>
 </Grid>
 
 @code{
     public bool EditMode { get; set; } = false;
+
+    public class ElementDefinition
+    {
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public int RowSpan { get; set; }
+        public int ColumnSpan { get; set; }
+        public bool Hidden { get; set; }
+    }
+    private List<ElementDefinition> elements = new List<ElementDefinition>
+{
+        new ElementDefinition { Row = 0, Column = 0, },
+        new ElementDefinition { Row = 1, Column = 0,},
+        new ElementDefinition { Row = 2, Column = 0,},
+        new ElementDefinition { Row = 0, Column = 1, },
+    };
 
     private void DoClick()
     {
