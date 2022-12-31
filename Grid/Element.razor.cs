@@ -38,6 +38,16 @@ namespace Excubo.Blazor.Grids
         /// </summary>
         [Parameter] public RenderFragment ChildContent { get; set; }
         /// <summary>
+        /// Allows you to override the default header and render your own content.
+        /// </summary>
+        /// <remarks>
+        /// If you override the header the header level and alignment attributes will have no effect.
+        /// 
+        /// The context is the Title you have set on this element.
+        /// </remarks>
+        [Parameter] public RenderFragment<string> Header { get; set; }
+
+        /// <summary>
         /// The column that this element should be in. In case the element spans multiple columns, this value indicates the column which contains the top left corner of the element.
         /// </summary>
         [Parameter] public int Column { get; set; }
@@ -75,6 +85,10 @@ namespace Excubo.Blazor.Grids
         /// Callback for when the element was resized.
         /// </summary>
         [Parameter] public Action<ElementResizeArgs> OnResize { get; set; }
+        /// <summary>
+        /// The class of the header. Only visible if a Title is present.
+        /// </summary>
+        [Parameter] public string HeaderClass { get; set; }
         /// <summary>
         /// The style of the header. Only visible if a Title is present. Defaults to a thin, dark line at the bottom of the header.
         /// </summary>

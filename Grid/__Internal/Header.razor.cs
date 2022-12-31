@@ -10,6 +10,9 @@ namespace Excubo.Blazor.Grids.__Internal
     {
         [CascadingParameter] public Element Element { get; set; }
         [Parameter] public string Title { get; set; }
+
+        [Parameter] public RenderFragment<string> ChildContent { get; set; }
+
         private bool render_required = true;
         protected override bool ShouldRender()
         {
