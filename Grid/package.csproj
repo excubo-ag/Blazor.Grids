@@ -20,7 +20,7 @@
   <!--PackageId, Version-->
   <PropertyGroup>
     <PackageId>Excubo.Blazor.Grids</PackageId>
-    <Version>3.1.40</Version>
+    <Version>3.1.41</Version>
   </PropertyGroup>
   <!--Self Include-->
   <ItemGroup>
