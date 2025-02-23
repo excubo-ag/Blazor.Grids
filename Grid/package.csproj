@@ -5,6 +5,7 @@
     <Description>Excubo.Blazor.Grids is a Blazor component library for a lightweight grid component and dashboard component.</Description>
     <PackageTags>blazor,html,grid,dashboard</PackageTags>
     <Product>Excubo.Blazor.Grids</Product>
+	<PackageReadmeFile>../README.md</PackageReadmeFile>
   </PropertyGroup>
   <!--Author, Company-->
   <PropertyGroup>
